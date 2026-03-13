@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;500&display=swap" rel="stylesheet">
     
     <style>
-        /* 基礎設定 */
         html { scroll-behavior: smooth; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -19,9 +18,13 @@
             overflow-x: hidden;
         }
 
-        /* --------------------
-           首頁影片區與加強版遮罩
-        -------------------- */
+        /* 進場動畫定義 */
+        @keyframes heroEntrance {
+            0% { opacity: 0; transform: translateY(40px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 影片區與遮罩 */
         .hero {
             position: relative;
             height: 100vh;
@@ -33,20 +36,10 @@
             text-align: center;
         }
 
-        .video-background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-
         .video-background iframe {
-            /* 稍微拉高影片高度 (110vh) 並置中，讓 YT 標題溢出螢幕 */
             width: 100vw;
-            height: 110vh; 
-            min-height: 110vh;
+            height: 115vh; /* 拉高影片以遮擋標題 */
+            min-height: 115vh;
             min-width: 177.77vh; 
             position: absolute;
             top: 50%;
@@ -61,14 +54,13 @@
             left: 0;
             width: 100%;
             height: 100%;
-            /* 上下加強遮罩：0-15% 完全遮擋標題，85-100% 完全遮擋進度條 */
             background: linear-gradient(
                 to bottom, 
                 rgba(18, 18, 18, 1) 0%,      
-                rgba(18, 18, 18, 0.7) 15%,   
+                rgba(18, 18, 18, 0.6) 15%,   
                 rgba(18, 18, 18, 0) 35%,     
                 rgba(18, 18, 18, 0) 65%,     
-                rgba(18, 18, 18, 0.7) 85%,   
+                rgba(18, 18, 18, 0.6) 85%,   
                 rgba(18, 18, 18, 1) 100%     
             );
             z-index: 1;
@@ -86,117 +78,51 @@
             z-index: 100;
         }
 
-        .logo {
-            font-size: 1.2rem;
-            letter-spacing: 4px;
-            font-weight: 500;
-            color: #FFFFFF;
-        }
+        .logo { font-size: 1.2rem; letter-spacing: 4px; color: #FFFFFF; }
+        .nav-links a { color: #AAAAAA; text-decoration: none; margin-left: 30px; font-size: 0.9rem; letter-spacing: 2px; }
 
-        .nav-links a {
-            color: #AAAAAA;
-            text-decoration: none;
-            margin-left: 30px;
-            font-size: 0.9rem;
-            letter-spacing: 2px;
-            transition: 0.3s;
-        }
-
-        .nav-links a:hover { color: #FFFFFF; }
-
-         /* 定義進場動畫：從下方 30px 處滑入並從透明變不透明 */
-        @keyframes heroEntrance {
-            0% {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        /* 應用動畫到標題容器 */
+        /* 標題與動畫應用 */
         .hero-content {
             z-index: 5;
             position: relative;
-            /* 動畫名稱 | 持續 1.5 秒 | 緩動效果 | 延遲 0.5 秒開始 (讓影片先跑一下) | 保持最後狀態 */
-            animation: heroEntrance 1.5s ease-out 0.5s both;
-            transition: opacity 0.1s ease-out; /* 保留捲動淡出的平滑感 */
+            animation: heroEntrance 2s ease-out 0.8s both; /* 進場動畫：延遲0.8秒開始 */
+            transition: opacity 0.1s ease-out;
         }
 
-        .hero-title {
-            font-size: 3.5rem;
-            font-weight: 300;
-            letter-spacing: 12px;
-            margin-bottom: 20px;
-            color: #FFFFFF;
-        }
+        .hero-title { font-size: 3.5rem; font-weight: 300; letter-spacing: 12px; margin-bottom: 20px; color: #FFFFFF; }
+        .hero-subtitle { font-size: 1.1rem; letter-spacing: 6px; opacity: 0.8; }
 
-        .hero-subtitle {
-            font-size: 1.1rem;
-            letter-spacing: 6px;
-            opacity: 0.8;
-        }
-
-        /* --------------------
-           作品展示區 (不對稱網格)
-        -------------------- */
-        .works-section {
-            background-color: #121212;
-            padding: 100px 40px;
-            position: relative;
-        }
-
-        .section-title {
-            font-size: 1.2rem;
-            letter-spacing: 8px;
-            text-align: center;
-            margin-bottom: 80px;
-            color: #FFFFFF;
-            font-weight: 300;
-        }
+        /* 作品區網格 */
+        .works-section { background-color: #121212; padding: 100px 40px; }
+        .section-title { font-size: 1.2rem; letter-spacing: 8px; text-align: center; margin-bottom: 80px; color: #FFFFFF; font-weight: 300; }
 
         .photo-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            grid-auto-rows: 280px;
+            grid-auto-rows: 300px;
             gap: 20px;
             max-width: 1400px;
             margin: 0 auto;
         }
 
-        .photo-item {
-            position: relative;
-            overflow: hidden;
-            background-color: #1a1a1a;
-        }
-
+        .photo-item { position: relative; overflow: hidden; background-color: #1a1a1a; }
         .photo-item img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             transition: transform 1s cubic-bezier(0.2, 1, 0.3, 1);
-            filter: grayscale(10%) brightness(0.9);
+            filter: grayscale(10%) brightness(0.8);
         }
 
-        .photo-item:hover img {
-            transform: scale(1.1);
-            filter: grayscale(0%) brightness(1.1);
-        }
+        .photo-item:hover img { transform: scale(1.1); filter: grayscale(0%) brightness(1.1); }
 
-        /* 佈局定義 */
         .large { grid-column: span 2; grid-row: span 2; }
         .tall { grid-column: span 1; grid-row: span 2; }
         .wide { grid-column: span 2; grid-row: span 1; }
 
         @media (max-width: 768px) {
-            nav { padding: 20px; }
             .hero-title { font-size: 2.5rem; }
-            .photo-grid {
-                grid-template-columns: 1fr;
-                grid-auto-rows: 300px;
-            }
+            .photo-grid { grid-template-columns: 1fr; grid-auto-rows: 300px; }
             .large, .tall, .wide { grid-column: span 1; grid-row: span 1; }
         }
     </style>
@@ -207,19 +133,14 @@
         <div class="logo">PETER CHIU</div>
         <div class="nav-links">
             <a href="#works">WORKS</a>
-            <a href="#">ABOUT</a>
+            <a href="https://www.flickr.com/photos/peterchiu0314/" target="_blank">FLICKR</a>
             <a href="#">CONTACT</a>
         </div>
     </nav>
 
     <section class="hero">
         <div class="video-background">
-            <iframe 
-                src="https://www.youtube.com/embed/J7vEna9qweM?autoplay=1&mute=1&loop=1&playlist=J7vEna9qweM&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&origin=https://peterchiu0314.github.io" 
-                frameborder="0" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                allowfullscreen>
-            </iframe>
+            <iframe src="https://www.youtube.com/embed/J7vEna9qweM?autoplay=1&mute=1&loop=1&playlist=J7vEna9qweM&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&origin=https://peterchiu0314.github.io" frameborder="0"></iframe>
             <div class="overlay"></div>
         </div>
         <div class="hero-content" id="heroContent">
@@ -238,13 +159,10 @@
                 <img src="https://img.youtube.com/vi/3QTMVksP2xI/maxresdefault.jpg" alt="車泊生活">
             </div>
             <div class="photo-item tall">
-                <img src="https://images.unsplash.com/photo-1533167649152-6d52924f5b3a?auto=format&fit=crop&q=80&w=800" alt="示範照">
+                <img src="https://live.staticflickr.com/65535/53549221008_3a1d9b3d9c_b.jpg" alt="Flickr 作品示範">
             </div>
             <div class="photo-item wide">
-                <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&q=80&w=1200" alt="示範照">
-            </div>
-            <div class="photo-item">
-                <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=800" alt="示範照">
+                <img src="https://live.staticflickr.com/65535/53549221010_4a2d8b3d8c_b.jpg" alt="Flickr 作品示範">
             </div>
         </div>
     </section>
@@ -253,20 +171,14 @@
         window.addEventListener('scroll', function() {
             const heroContent = document.getElementById('heroContent');
             let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            
-            // 捲動淡出邏輯
-            let opacity = 1 - (scrollTop / 400);
-            
+            let opacity = 1 - (scrollTop / 450);
             if (opacity >= 0) {
                 heroContent.style.opacity = opacity;
-                // 捲動時的向上位移 (這裡會接續動畫結束後的狀態)
                 heroContent.style.transform = `translateY(${scrollTop * 0.3}px)`;
             } else {
                 heroContent.style.opacity = 0;
             }
         });
     </script>
-
 </body>
 </html>
-
