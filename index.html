@@ -182,8 +182,30 @@
                 heroContent.style.opacity = 0;
             }
         });
+                // 監聽滾動，讓作品圖片在進入視窗時才浮現
+        const observerOptions = {
+            threshold: 0.1 // 當照片露出 10% 時觸發
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = "1";
+                    entry.target.style.transform = "translateY(0)";
+                }
+            });
+        }, observerOptions);
+        
+        // 初始設定照片為透明且略微偏下
+        document.querySelectorAll('.photo-item').forEach(item => {
+            item.style.opacity = "0";
+            item.style.transform = "translateY(50px)";
+            item.style.transition = "all 1s cubic-bezier(0.2, 1, 0.3, 1)";
+            observer.observe(item);
+        });
     </script>
 </body>
 </html>
+
 
 
