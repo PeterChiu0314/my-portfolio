@@ -8,25 +8,19 @@
     
     <style>
         /* 基礎設定 */
-        html {
-            scroll-behavior: smooth; /* 平滑捲動 */
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        html { scroll-behavior: smooth; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             background-color: #121212; 
             color: #D1D1D1; 
             font-family: 'Noto Serif TC', serif;
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
         /* --------------------
-           首頁影片區塊
+           首頁影片區與加強版遮罩
         -------------------- */
         .hero {
             position: relative;
@@ -49,9 +43,10 @@
         }
 
         .video-background iframe {
+            /* 稍微拉高影片高度 (110vh) 並置中，讓 YT 標題溢出螢幕 */
             width: 100vw;
-            height: 56.25vw;
-            min-height: 100vh;
+            height: 110vh; 
+            min-height: 110vh;
             min-width: 177.77vh; 
             position: absolute;
             top: 50%;
@@ -66,21 +61,22 @@
             left: 0;
             width: 100%;
             height: 100%;
+            /* 上下加強遮罩：0-15% 完全遮擋標題，85-100% 完全遮擋進度條 */
             background: linear-gradient(
                 to bottom, 
-                rgba(18, 18, 18, 1) 0%,      /* 頂部：完全不透明炭灰，徹底遮擋標題 */
-                rgba(18, 18, 18, 1) 15%,     /* 快速過渡 */
-                rgba(18, 18, 18, 0) 25%,     /* 中間保持透明，露出影片核心 */
-                rgba(18, 18, 18, 0) 75%,     /* 下方透明區結束 */
-                rgba(18, 18, 18, 1) 85%,     /* 底部開始加深 */
-                rgba(18, 18, 18, 1) 100%     /* 底部：完全不透明炭灰，遮擋進度條與 Logo */ 
+                rgba(18, 18, 18, 1) 0%,      
+                rgba(18, 18, 18, 0.7) 15%,   
+                rgba(18, 18, 18, 0) 35%,     
+                rgba(18, 18, 18, 0) 65%,     
+                rgba(18, 18, 18, 0.7) 85%,   
+                rgba(18, 18, 18, 1) 100%     
             );
-            z-index: 0;
+            z-index: 1;
         }
 
         /* 導覽列 */
         nav {
-            position: fixed; /* 固定在頂部 */
+            position: fixed;
             top: 0;
             width: 100%;
             padding: 30px 60px;
@@ -106,14 +102,13 @@
             transition: 0.3s;
         }
 
-        .nav-links a:hover {
-            color: #FFFFFF;
-        }
+        .nav-links a:hover { color: #FFFFFF; }
 
-        /* 標題文字 */
+        /* 標題與淡出效果設定 */
         .hero-content {
             z-index: 5;
             position: relative;
+            transition: opacity 0.1s ease-out; /* 讓淡出更平滑 */
         }
 
         .hero-title {
@@ -128,14 +123,13 @@
             font-size: 1.1rem;
             letter-spacing: 6px;
             opacity: 0.8;
-            font-weight: 300;
         }
 
         /* --------------------
            作品展示區 (不對稱網格)
         -------------------- */
         .works-section {
-            background-color: #000000;
+            background-color: #121212;
             padding: 100px 40px;
             position: relative;
         }
@@ -169,20 +163,19 @@
             height: 100%;
             object-fit: cover;
             transition: transform 1s cubic-bezier(0.2, 1, 0.3, 1);
-            filter: grayscale(20%) brightness(0.8);
+            filter: grayscale(10%) brightness(0.9);
         }
 
         .photo-item:hover img {
             transform: scale(1.1);
-            filter: grayscale(0%) brightness(1);
+            filter: grayscale(0%) brightness(1.1);
         }
 
-        /* 不對稱樣式定義 */
+        /* 佈局定義 */
         .large { grid-column: span 2; grid-row: span 2; }
         .tall { grid-column: span 1; grid-row: span 2; }
         .wide { grid-column: span 2; grid-row: span 1; }
 
-        /* 手機版適應 */
         @media (max-width: 768px) {
             nav { padding: 20px; }
             .hero-title { font-size: 2.5rem; }
@@ -215,7 +208,7 @@
             </iframe>
             <div class="overlay"></div>
         </div>
-        <div class="hero-content">
+        <div class="hero-content" id="heroContent">
             <h1 class="hero-title">暴風前夕</h1>
             <p class="hero-subtitle">在迷霧的宜蘭，記錄影像的溫度</p>
         </div>
@@ -223,30 +216,41 @@
 
     <section id="works" class="works-section">
         <h2 class="section-title">SELECTED WORKS</h2>
-        
         <div class="photo-grid">
             <div class="photo-item large">
                 <img src="https://img.youtube.com/vi/J7vEna9qweM/maxresdefault.jpg" alt="宜蘭空拍">
             </div>
-
             <div class="photo-item">
                 <img src="https://img.youtube.com/vi/3QTMVksP2xI/maxresdefault.jpg" alt="車泊生活">
             </div>
-
             <div class="photo-item tall">
-                <img src="https://images.unsplash.com/photo-1533167649152-6d52924f5b3a?auto=format&fit=crop&q=80&w=800" alt="示範照-星空">
+                <img src="https://images.unsplash.com/photo-1533167649152-6d52924f5b3a?auto=format&fit=crop&q=80&w=800" alt="示範照">
             </div>
-
             <div class="photo-item wide">
-                <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&q=80&w=1200" alt="示範照-湖泊">
+                <img src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&q=80&w=1200" alt="示範照">
             </div>
-
             <div class="photo-item">
-                <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=800" alt="示範照-山脈">
+                <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&q=80&w=800" alt="示範照">
             </div>
         </div>
     </section>
 
+    <script>
+        window.addEventListener('scroll', function() {
+            const heroContent = document.getElementById('heroContent');
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            
+            // 捲動 400px 時完全消失，你可以調整這個數值
+            let opacity = 1 - (scrollTop / 400);
+            
+            if (opacity >= 0) {
+                heroContent.style.opacity = opacity;
+                heroContent.style.transform = `translateY(${scrollTop * 0.3}px)`;
+            } else {
+                heroContent.style.opacity = 0;
+            }
+        });
+    </script>
+
 </body>
 </html>
-
