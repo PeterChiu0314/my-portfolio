@@ -104,11 +104,25 @@
 
         .nav-links a:hover { color: #FFFFFF; }
 
-        /* 標題與淡出效果設定 */
+         /* 定義進場動畫：從下方 30px 處滑入並從透明變不透明 */
+        @keyframes heroEntrance {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* 應用動畫到標題容器 */
         .hero-content {
             z-index: 5;
             position: relative;
-            transition: opacity 0.1s ease-out; /* 讓淡出更平滑 */
+            /* 動畫名稱 | 持續 1.5 秒 | 緩動效果 | 延遲 0.5 秒開始 (讓影片先跑一下) | 保持最後狀態 */
+            animation: heroEntrance 1.5s ease-out 0.5s both;
+            transition: opacity 0.1s ease-out; /* 保留捲動淡出的平滑感 */
         }
 
         .hero-title {
@@ -240,11 +254,12 @@
             const heroContent = document.getElementById('heroContent');
             let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
             
-            // 捲動 400px 時完全消失，你可以調整這個數值
+            // 捲動淡出邏輯
             let opacity = 1 - (scrollTop / 400);
             
             if (opacity >= 0) {
                 heroContent.style.opacity = opacity;
+                // 捲動時的向上位移 (這裡會接續動畫結束後的狀態)
                 heroContent.style.transform = `translateY(${scrollTop * 0.3}px)`;
             } else {
                 heroContent.style.opacity = 0;
@@ -254,3 +269,4 @@
 
 </body>
 </html>
+
