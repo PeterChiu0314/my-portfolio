@@ -3,172 +3,163 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Peter Chiu | 影像作品集</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;500&display=swap" rel="stylesheet">
+    <title>Peter Chiu | 影像作品集</title> [cite: 1, 2]
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@300;500&display=swap" rel="stylesheet"> [cite: 2]
     
     <style>
-        html { scroll-behavior: smooth; }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; } [cite: 3]
+        * { margin: 0; padding: 0; box-sizing: border-box; } [cite: 3, 4]
 
         body {
-            background-color: #121212; 
-            color: #D1D1D1; 
-            font-family: 'Noto Serif TC', serif;
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        /* 進場動畫定義 */
-        @keyframes heroEntrance {
-            0% { opacity: 0; transform: translateY(40px); }
-            100% { opacity: 1; transform: translateY(0); }
+            background-color: #121212; [cite: 5]
+            color: #D1D1D1; [cite: 5]
+            font-family: 'Noto Serif TC', serif; [cite: 5]
+            line-height: 1.6; [cite: 5]
+            overflow-x: hidden; [cite: 5]
         }
 
         /* 影片區與遮罩 */
         .hero {
-            position: relative;
-            height: 100vh;
-            width: 100%;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
+            position: relative; [cite: 9]
+            height: 100vh; [cite: 9]
+            width: 100%; [cite: 9]
+            overflow: hidden; [cite: 9]
+            display: flex; [cite: 9]
+            justify-content: center; [cite: 9]
+            align-items: center; [cite: 9]
+            text-align: center; [cite: 9]
         }
 
         .video-background iframe {
-            width: 100vw;
-            height: 115vh; /* 拉高影片以遮擋標題 */
-            min-height: 115vh;
-            min-width: 177.77vh; 
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            pointer-events: none;
+            width: 100vw; [cite: 10]
+            height: 115vh; [cite: 11]
+            min-height: 115vh; [cite: 11]
+            min-width: 177.77vh; [cite: 11]
+            position: absolute; [cite: 12]
+            top: 50%; [cite: 12]
+            left: 50%; [cite: 12]
+            transform: translate(-50%, -50%); [cite: 12]
+            pointer-events: none; [cite: 12]
         }
 
         .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            position: absolute; [cite: 13]
+            top: 0; [cite: 14]
+            left: 0; [cite: 14]
+            width: 100%; [cite: 14]
+            height: 100%; [cite: 14]
             background: linear-gradient(
                 to bottom, 
                 rgba(18, 18, 18, 1) 0%,      
                 rgba(18, 18, 18, 0.4) 10%,   
-                rgba(18, 18, 18, 0) 25%,     
+                rgba(18, 18, 18, 0) 25%,    
                 rgba(18, 18, 18, 0) 75%,     
                 rgba(18, 18, 18, 0.4) 90%,   
                 rgba(18, 18, 18, 1) 100%     
-            );
-            z-index: 1;
+            ); [cite: 14, 15]
+            z-index: 1; [cite: 16]
         }
 
         /* 導覽列 */
         nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 30px 60px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 100;
+            position: fixed; [cite: 16]
+            top: 0; [cite: 17]
+            width: 100%; [cite: 17]
+            padding: 30px 60px; [cite: 17]
+            display: flex; [cite: 17]
+            justify-content: space-between; [cite: 17]
+            align-items: center; [cite: 17]
+            z-index: 100; [cite: 17]
         }
 
-        .logo { font-size: 1.2rem; letter-spacing: 4px; color: #FFFFFF; }
-        .nav-links a { color: #AAAAAA; text-decoration: none; margin-left: 30px; font-size: 0.9rem; letter-spacing: 2px; }
+        .logo { font-size: 1.2rem; letter-spacing: 4px; color: #FFFFFF; } [cite: 18]
+        .nav-links a { color: #AAAAAA; text-decoration: none; margin-left: 30px; font-size: 0.9rem; letter-spacing: 2px; } [cite: 19, 20]
 
-        /* 標題基礎樣式 */
+        /* 標題進場動畫修正 */
+        .hero-content {
+            z-index: 5;
+            position: relative;
+            animation: heroEntrance 1.2s cubic-bezier(0.2, 1, 0.3, 1) 0.2s both; /* 縮短延遲至 0.2s */
+        }
+
+        @keyframes heroEntrance {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
         .hero-title {
-            font-size: 3.2rem;
-            font-weight: 300;
-            letter-spacing: 18px; /* 增加字距，營造空間感 */
-            margin-bottom: 25px;
-            color: #FFFFFF;
-            text-shadow: 0 0 20px rgba(0,0,0,0.5); /* 增加陰影確保在淺色背景也能看清 */
+            font-size: 3.2rem; [cite: 20]
+            font-weight: 300; [cite: 21]
+            letter-spacing: 18px; [cite: 21]
+            margin-bottom: 25px; [cite: 21]
+            color: #FFFFFF; [cite: 22]
+            text-shadow: 0 0 20px rgba(0,0,0,0.5); [cite: 22]
         }
         
-        /* 副標題容器 */
         .hero-subtitle-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-            opacity: 0; /* 初始透明，由動畫控制 */
-            animation: fadeIn 2s ease-out 1.5s forwards; /* 延遲 1.5s 出現 */
+            display: flex; [cite: 22]
+            flex-direction: column; [cite: 23]
+            align-items: center; [cite: 23]
+            gap: 12px; [cite: 23]
+            opacity: 0; 
+            animation: fadeIn 1.5s ease-out 0.8s forwards; /* 縮短延遲至 0.8s */
         }
         
         .hero-subtitle-en {
-            font-size: 0.9rem;
-            letter-spacing: 5px;
-            color: #AAAAAA;
-            text-transform: uppercase;
+            font-size: 0.9rem; [cite: 24]
+            letter-spacing: 5px; [cite: 25]
+            color: #AAAAAA; [cite: 25]
+            text-transform: uppercase; [cite: 25]
         }
         
         .hero-subtitle-zh {
-            font-size: 1rem;
-            letter-spacing: 4px;
-            color: #D1D1D1;
-            font-weight: 300;
+            font-size: 1rem; [cite: 25]
+            letter-spacing: 4px; [cite: 26]
+            color: #D1D1D1; [cite: 26]
+            font-weight: 300; [cite: 26]
         }
         
-        /* 簡單的淡入動畫 */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 0.8; transform: translateY(0); }
+            from { opacity: 0; transform: translateY(10px); } [cite: 27]
+            to { opacity: 0.8; transform: translateY(0); } [cite: 28]
         }
         
-        /* 手機版適應 */
-        @media (max-width: 768px) {
-            .hero-title {
-                font-size: 2rem;
-                letter-spacing: 8px;
-            }
-            .hero-subtitle-zh {
-                font-size: 0.85rem;
-                padding: 0 20px;
-            }
-        }
-
         /* 作品區網格 */
         .works-section {
-            background-color: #121212;
-            padding: 200px 40px; /* 增加頂部間距，給動畫一點發揮空間 */
-            margin-top: -10vh;   /* 讓黑底稍微蓋住影片底部，消除硬邊 */
+            background-color: #121212; [cite: 30]
+            padding: 200px 40px; [cite: 31]
+            margin-top: -10vh; [cite: 31]
         }
-        .section-title { font-size: 1.2rem; letter-spacing: 8px; text-align: center; margin-bottom: 80px; color: #FFFFFF; font-weight: 300; }
+        .section-title { font-size: 1.2rem; letter-spacing: 8px; text-align: center; margin-bottom: 80px; color: #FFFFFF; font-weight: 300; } [cite: 32, 33, 34]
 
         .photo-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-auto-rows: 300px;
-            gap: 20px;
-            max-width: 1400px;
-            margin: 0 auto;
+            display: grid; [cite: 34]
+            grid-template-columns: repeat(4, 1fr); [cite: 35]
+            grid-auto-rows: 300px; [cite: 35]
+            gap: 20px; [cite: 35]
+            max-width: 1400px; [cite: 35]
+            margin: 0 auto; [cite: 35]
         }
 
-        .photo-item { position: relative; overflow: hidden; background-color: #1a1a1a; }
+        .photo-item { position: relative; overflow: hidden; background-color: #1a1a1a; } [cite: 36]
         .photo-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 1s cubic-bezier(0.2, 1, 0.3, 1);
-            filter: grayscale(10%) brightness(0.8);
+            width: 100%; [cite: 37]
+            height: 100%; [cite: 38]
+            object-fit: cover; [cite: 38]
+            transition: transform 1s cubic-bezier(0.2, 1, 0.3, 1); [cite: 38]
+            filter: grayscale(10%) brightness(0.8); [cite: 38, 39]
         }
 
-        .photo-item:hover img { transform: scale(1.1); filter: grayscale(0%) brightness(1.1); }
+        .photo-item:hover img { transform: scale(1.1); filter: grayscale(0%) brightness(1.1); } [cite: 40]
 
-        .large { grid-column: span 2; grid-row: span 2; }
-        .tall { grid-column: span 1; grid-row: span 2; }
-        .wide { grid-column: span 2; grid-row: span 1; }
+        .large { grid-column: span 2; grid-row: span 2; } [cite: 41]
+        .tall { grid-column: span 1; grid-row: span 2; } [cite: 42]
+        .wide { grid-column: span 2; grid-row: span 1; } [cite: 43]
 
         @media (max-width: 768px) {
-            .hero-title { font-size: 2.5rem; }
-            .photo-grid { grid-template-columns: 1fr; grid-auto-rows: 300px; }
-            .large, .tall, .wide { grid-column: span 1; grid-row: span 1; }
+            .hero-title { font-size: 2.5rem; letter-spacing: 8px; } [cite: 44]
+            .photo-grid { grid-template-columns: 1fr; grid-auto-rows: 300px; } [cite: 45]
+            .large, .tall, .wide { grid-column: span 1; grid-row: span 1; } [cite: 46]
         }
     </style>
 </head>
@@ -185,90 +176,83 @@
 
     <section class="hero">
         <div class="video-background">
-            <iframe src="https://www.youtube.com/embed/3QTMVksP2xI?autoplay=1&mute=1&loop=1&playlist=3QTMVksP2xI&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&origin=https://peterchiu0314.github.io" frameborder="0"></iframe>
+            <iframe src="https://www.youtube.com/embed/3QTMVksP2xI?autoplay=1&mute=1&loop=1&playlist=3QTMVksP2xI&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&origin=https://peterchiu0314.github.io" frameborder="0"></iframe> [cite: 47]
             <div class="overlay"></div>
         </div>
         <div class="hero-content" id="heroContent">
-            <h1 class="hero-title">野徑微光的紀錄者</h1>
+            <h1 class="hero-title">野徑微光的紀錄者</h1> [cite: 47]
             <div class="hero-subtitle-container">
-                <p class="hero-subtitle-en">Capture the fleeting light.</p>
-                <span class="subtitle-divider"></span>
-                <p class="hero-subtitle-zh">用最真實的影像，紀錄稍縱即逝的回憶。</p>
+                <p class="hero-subtitle-en">Capture the fleeting light.</p> [cite: 47]
+                <p class="hero-subtitle-zh">用最真實的影像，紀錄稍縱即逝的回憶。</p> [cite: 48]
             </div>
         </div>
     </section>
 
     <section id="works" class="works-section">
-        <h2 class="section-title">SELECTED WORKS</h2>
+        <h2 class="section-title">SELECTED WORKS</h2> [cite: 49]
         <div class="photo-grid">
             <div class="photo-item large">
-                <img src="https://img.youtube.com/vi/J7vEna9qweM/maxresdefault.jpg" alt="宜蘭空拍">
+                <img src="https://img.youtube.com/vi/J7vEna9qweM/maxresdefault.jpg" alt="宜蘭空拍"> [cite: 49]
             </div>
             <div class="photo-item">
-                <img src="https://img.youtube.com/vi/3QTMVksP2xI/maxresdefault.jpg" alt="車泊生活">
+                <img src="https://img.youtube.com/vi/3QTMVksP2xI/maxresdefault.jpg" alt="車泊生活"> [cite: 49]
             </div>
             <div class="photo-item">
-                <img src="https://live.staticflickr.com/65535/53667814818_64d2005cf5_k.jpg" alt="富士山">
+                <img src="https://live.staticflickr.com/65535/53667814818_64d2005cf5_k.jpg" alt="富士山"> [cite: 49, 50]
             </div>            
             <div class="photo-item tall">
-                <img src="https://live.staticflickr.com/65535/54492009753_f3e57d4fb1_k.jpg" alt="Flickr 作品示範">
+                <img src="https://live.staticflickr.com/65535/54492009753_f3e57d4fb1_k.jpg" alt="Flickr 作品示範"> [cite: 50]
             </div>
             <div class="photo-item wide">
-                <img src="https://live.staticflickr.com/65535/54473516983_840fddefd4_k.jpg" alt="Flickr 作品示範">
+                <img src="https://live.staticflickr.com/65535/54473516983_840fddefd4_k.jpg" alt="Flickr 作品示範"> [cite: 50, 51]
             </div>
         </div>
     </section>
 
     <script>
-        // 1. 處理標題淡出效果 (保留原有功能)
+        // 1. 處理標題滾動淡出邏輯 (修正初始衝突)
         window.addEventListener('scroll', function() {
-            const heroContent = document.getElementById('heroContent');
-            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            let opacity = 1 - (scrollTop / 450);
+            const heroContent = document.getElementById('heroContent'); [cite: 51, 52]
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop; [cite: 52]
             
-            if (opacity >= 0) {
-                heroContent.style.opacity = opacity;
-                heroContent.style.transform = `translateY(${scrollTop * 0.3}px)`;
+            // 只有當捲動超過 10px 時才接手透明度控制
+            if (scrollTop > 10) {
+                let opacity = 1 - (scrollTop / 450); [cite: 52]
+                heroContent.style.opacity = opacity >= 0 ? opacity : 0; [cite: 53, 54]
+                heroContent.style.transform = `translateY(${scrollTop * 0.3}px)`; [cite: 54]
             } else {
-                heroContent.style.opacity = 0;
+                heroContent.style.opacity = 1;
+                heroContent.style.transform = `translateY(0px)`;
             }
         });
     
         // 2. 處理作品集「每次捲動」的浮現效果
         const observerOptions = {
-            threshold: 0.15, // 當照片露出 15% 時觸發
-            rootMargin: "0px 0px -50px 0px" // 稍微提前或延後觸發，讓體感更自然
+            threshold: 0.15, [cite: 55]
+            rootMargin: "0px 0px -50px 0px" [cite: 55]
         };
-    
+
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    // 當進入視窗時：變不透明 + 回到位移原點
-                    entry.target.style.opacity = "1";
-                    entry.target.style.transform = "translateY(0)";
-                    entry.target.style.filter = "blur(0px)"; // 額外加個去模糊，質感更好
+                    entry.target.style.opacity = "1"; [cite: 56]
+                    entry.target.style.transform = "translateY(0)"; [cite: 57]
+                    entry.target.style.filter = "blur(0px)"; [cite: 57]
                 } else {
-                    // 當離開視窗時：重置回透明 + 往下位移 (這樣下次捲過來才會再動一次)
-                    entry.target.style.opacity = "0";
-                    entry.target.style.transform = "translateY(60px)";
-                    entry.target.style.filter = "blur(5px)";
+                    entry.target.style.opacity = "0"; [cite: 57]
+                    entry.target.style.transform = "translateY(60px)"; [cite: 58]
+                    entry.target.style.filter = "blur(5px)"; [cite: 58]
                 }
             });
-        }, observerOptions);
-    
-        // 套用到所有照片項目
+        }, observerOptions); [cite: 58]
+
         document.querySelectorAll('.photo-item').forEach(item => {
-            // 初始狀態設定
-            item.style.opacity = "0";
-            item.style.transform = "translateY(60px)";
-            item.style.filter = "blur(5px)";
-            item.style.transition = "all 1.2s cubic-bezier(0.22, 1, 0.36, 1)"; // 柔順的減速曲線
-            
-            observer.observe(item);
+            item.style.opacity = "0"; [cite: 59]
+            item.style.transform = "translateY(60px)"; [cite: 59]
+            item.style.filter = "blur(5px)"; [cite: 59]
+            item.style.transition = "all 1.2s cubic-bezier(0.22, 1, 0.36, 1)"; [cite: 59]
+            observer.observe(item); [cite: 60]
         });
     </script>
 </body>
 </html>
-
-
-
