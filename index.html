@@ -81,16 +81,57 @@
         .logo { font-size: 1.2rem; letter-spacing: 4px; color: #FFFFFF; }
         .nav-links a { color: #AAAAAA; text-decoration: none; margin-left: 30px; font-size: 0.9rem; letter-spacing: 2px; }
 
-        /* 標題與動畫應用 */
-        .hero-content {
-            z-index: 5;
-            position: relative;
-            animation: heroEntrance 2s ease-out 0.8s both; /* 進場動畫：延遲0.8秒開始 */
-            transition: opacity 0.1s ease-out;
+        /* 標題基礎樣式 */
+        .hero-title {
+            font-size: 3.2rem;
+            font-weight: 300;
+            letter-spacing: 18px; /* 增加字距，營造空間感 */
+            margin-bottom: 25px;
+            color: #FFFFFF;
+            text-shadow: 0 0 20px rgba(0,0,0,0.5); /* 增加陰影確保在淺色背景也能看清 */
         }
-
-        .hero-title { font-size: 3.5rem; font-weight: 300; letter-spacing: 12px; margin-bottom: 20px; color: #FFFFFF; }
-        .hero-subtitle { font-size: 1.1rem; letter-spacing: 6px; opacity: 0.8; }
+        
+        /* 副標題容器 */
+        .hero-subtitle-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            opacity: 0; /* 初始透明，由動畫控制 */
+            animation: fadeIn 2s ease-out 1.5s forwards; /* 延遲 1.5s 出現 */
+        }
+        
+        .hero-subtitle-en {
+            font-size: 0.9rem;
+            letter-spacing: 5px;
+            color: #AAAAAA;
+            text-transform: uppercase;
+        }
+        
+        .hero-subtitle-zh {
+            font-size: 1rem;
+            letter-spacing: 4px;
+            color: #D1D1D1;
+            font-weight: 300;
+        }
+        
+        /* 簡單的淡入動畫 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 0.8; transform: translateY(0); }
+        }
+        
+        /* 手機版適應 */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+                letter-spacing: 8px;
+            }
+            .hero-subtitle-zh {
+                font-size: 0.85rem;
+                padding: 0 20px;
+            }
+        }
 
         /* 作品區網格 */
         .works-section {
@@ -144,12 +185,16 @@
 
     <section class="hero">
         <div class="video-background">
-            <iframe src="https://www.youtube.com/embed/3QTMVksP2xI?autoplay=1&mute=1&loop=1&playlist=3QTMVksP2xI&start=11&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&origin=https://peterchiu0314.github.io" frameborder="0"></iframe>
+            <iframe src="https://www.youtube.com/embed/3QTMVksP2xI?autoplay=1&mute=1&loop=1&playlist=3QTMVksP2xI&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&origin=https://peterchiu0314.github.io" frameborder="0"></iframe>
             <div class="overlay"></div>
         </div>
         <div class="hero-content" id="heroContent">
-            <h1 class="hero-title">暴風前夕</h1>
-            <p class="hero-subtitle">在迷霧的宜蘭，記錄影像的溫度</p>
+            <h1 class="hero-title">野徑微光的紀錄者</h1>
+            <div class="hero-subtitle-container">
+                <p class="hero-subtitle-en">Capture the fleeting light.</p>
+                <span class="subtitle-divider"></span>
+                <p class="hero-subtitle-zh">用最真實的影像，紀錄稍縱即逝的回憶。</p>
+            </div>
         </div>
     </section>
 
