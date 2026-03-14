@@ -93,7 +93,11 @@
         .hero-subtitle { font-size: 1.1rem; letter-spacing: 6px; opacity: 0.8; }
 
         /* 作品區網格 */
-        .works-section { background-color: #121212; padding: 100px 40px; }
+        .works-section {
+            background-color: #121212;
+            padding: 200px 40px; /* 增加頂部間距，給動畫一點發揮空間 */
+            margin-top: -10vh;   /* 讓黑底稍微蓋住影片底部，消除硬邊 */
+        }
         .section-title { font-size: 1.2rem; letter-spacing: 8px; text-align: center; margin-bottom: 80px; color: #FFFFFF; font-weight: 300; }
 
         .photo-grid {
@@ -171,10 +175,12 @@
     </section>
 
     <script>
+        // 1. 處理標題淡出效果 (保留原有功能)
         window.addEventListener('scroll', function() {
             const heroContent = document.getElementById('heroContent');
             let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
             let opacity = 1 - (scrollTop / 450);
+            
             if (opacity >= 0) {
                 heroContent.style.opacity = opacity;
                 heroContent.style.transform = `translateY(${scrollTop * 0.3}px)`;
@@ -182,25 +188,37 @@
                 heroContent.style.opacity = 0;
             }
         });
-                // 監聽滾動，讓作品圖片在進入視窗時才浮現
+    
+        // 2. 處理作品集「每次捲動」的浮現效果
         const observerOptions = {
-            threshold: 0.1 // 當照片露出 10% 時觸發
+            threshold: 0.15, // 當照片露出 15% 時觸發
+            rootMargin: "0px 0px -50px 0px" // 稍微提前或延後觸發，讓體感更自然
         };
-        
+    
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
+                    // 當進入視窗時：變不透明 + 回到位移原點
                     entry.target.style.opacity = "1";
                     entry.target.style.transform = "translateY(0)";
+                    entry.target.style.filter = "blur(0px)"; // 額外加個去模糊，質感更好
+                } else {
+                    // 當離開視窗時：重置回透明 + 往下位移 (這樣下次捲過來才會再動一次)
+                    entry.target.style.opacity = "0";
+                    entry.target.style.transform = "translateY(60px)";
+                    entry.target.style.filter = "blur(5px)";
                 }
             });
         }, observerOptions);
-        
-        // 初始設定照片為透明且略微偏下
+    
+        // 套用到所有照片項目
         document.querySelectorAll('.photo-item').forEach(item => {
+            // 初始狀態設定
             item.style.opacity = "0";
-            item.style.transform = "translateY(50px)";
-            item.style.transition = "all 1s cubic-bezier(0.2, 1, 0.3, 1)";
+            item.style.transform = "translateY(60px)";
+            item.style.filter = "blur(5px)";
+            item.style.transition = "all 1.2s cubic-bezier(0.22, 1, 0.36, 1)"; // 柔順的減速曲線
+            
             observer.observe(item);
         });
     </script>
