@@ -143,7 +143,7 @@
             margin: 0 auto;
         }
 
-        .photo-item { position: relative; overflow: hidden; background-color: #1a1a1a; }
+        .photo-item { position: relative; overflow: hidden; background-color: #1a1a1a; cursor: zoom-in; }
         .photo-item img {
             width: 100%; height: 100%; object-fit: cover;
             transition: transform 1.2s cubic-bezier(0.2, 1, 0.3, 1);
@@ -154,6 +154,31 @@
         .large { grid-column: span 2; grid-row: span 2; }
         .tall { grid-column: span 1; grid-row: span 2; }
         .wide { grid-column: span 2; grid-row: span 1; }
+
+        /* 彈窗樣式 */
+        #lightbox {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(10, 10, 10, 0.95);
+            z-index: 1000;
+            cursor: zoom-out;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        #lightbox.active { display: flex; opacity: 1; }
+        #lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+            transform: scale(0.9);
+            transition: transform 0.4s cubic-bezier(0.2, 1, 0.3, 1);
+        }
+        #lightbox.active img { transform: scale(1); }
 
         @media (max-width: 768px) {
             nav { padding: 20px 30px; }
@@ -240,6 +265,8 @@
         </div>
     </section>
 
+    <div id="lightbox"><img id="lightbox-img" src=""></div>
+
     <script>
     // 1. YouTube IFrame API
     var tag = document.createElement('script');
@@ -259,7 +286,7 @@
             const loader = document.getElementById('loading-screen');
             setTimeout(() => { loader.classList.add('fade-out'); }, 200); 
             
-            // --- 新增：啟動效能監控觀察器 ---
+            // --- 啟動效能監控觀察器 ---
             startHeroObserver();
         }
     }
@@ -268,18 +295,15 @@
     function startHeroObserver() {
         const heroObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                // 確保播放器已經準備好
                 if (player && player.pauseVideo && player.playVideo) {
                     if (entry.isIntersecting) {
-                        // 畫面回到頂部：恢復播放
                         player.playVideo();
                     } else {
-                        // 主頁完全消失：暫停播放以節省效能
                         player.pauseVideo();
                     }
                 }
             });
-        }, { threshold: 0 }); // 只要 hero 剩 0% 可見，就觸發暫停
+        }, { threshold: 0 });
     
         heroObserver.observe(document.querySelector('.hero'));
     }
@@ -306,7 +330,7 @@
         }
     });
     
-    // 4. 作品集捲動浮現效果 (這部分維持原樣)
+    // 4. 作品集捲動浮現效果
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -323,6 +347,23 @@
         item.style.filter = "blur(5px)";
         item.style.transition = "all 1s cubic-bezier(0.2, 1, 0.3, 1)";
         observer.observe(item);
+    });
+
+    // --- 5. 新增：作品點擊彈窗邏輯 ---
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+
+    document.querySelectorAll('.photo-item img').forEach(img => {
+        img.addEventListener('click', () => {
+            lightboxImg.src = img.src;
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden'; // 鎖定捲動
+        });
+    });
+
+    lightbox.addEventListener('click', () => {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = 'auto'; // 恢復捲動
     });
     </script>
 </body>
