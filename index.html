@@ -151,7 +151,7 @@
         .tall { grid-column: span 1; grid-row: span 2; }
         .wide { grid-column: span 2; grid-row: span 1; }
 
-        /* --- 影片網格樣式 (新增) --- */
+        /* --- 影片網格樣式 --- */
         .video-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -172,7 +172,7 @@
         .video-info h3 { font-size: 1rem; font-weight: 300; letter-spacing: 2px; color: #FFF; }
         .video-info p { font-size: 0.8rem; color: #666; margin-top: 5px; }
 
-        /* --- 深度優化彈窗動畫 --- */
+        /* --- 彈窗動畫與尺寸修正 --- */
         #lightbox {
             display: none;
             position: fixed;
@@ -191,14 +191,18 @@
         
         #lightbox.active {
             display: flex;
-            background: rgba(10, 10, 10, 0.9);
+            background: rgba(10, 10, 10, 0.95);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
         }
         
         #lightbox-content {
-            max-width: 90%;
-            max-height: 90%;
+            width: 90%;
+            max-width: 1200px;
+            max-height: 80vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             box-shadow: 0 10px 50px rgba(0,0,0,0.5);
             transform: scale(0.7) translateY(30px); 
             opacity: 0;
@@ -210,10 +214,10 @@
             opacity: 1;
         }
 
-        #lightbox img, #lightbox iframe { width: 100%; height: 100%; object-fit: contain; }
-        #lightbox iframe { aspect-ratio: 16/9; width: 80vw; }
+        #lightbox img { max-width: 100%; max-height: 80vh; object-fit: contain; }
+        #lightbox iframe { width: 100%; aspect-ratio: 16 / 9; max-height: 80vh; border: none; }
 
-        /* --- 回到頂部按鈕樣式 --- */
+        /* --- 回到頂部按鈕 --- */
         #back-to-top {
             position: fixed;
             bottom: 40px;
@@ -254,8 +258,8 @@
         <div class="logo">PETER CHIU</div>
         <div class="nav-links">
             <a href="#nature">NATURE</a>
-            <a href="#cinema">CINEMA</a>
             <a href="#interior">INTERIOR</a>
+            <a href="#cinema">CINEMA</a>
             <a href="https://www.flickr.com/photos/peterchiu0314/" target="_blank">FLICKR</a>
         </div>
     </nav>
@@ -305,36 +309,6 @@
         </div>
     </section>
 
-    <section id="cinema" class="works-section video-section">
-        <h2 class="section-title">CINEMATIC SCENES</h2>
-        <p class="section-subtitle">影像、環境音與流浪的紀錄</p>
-        <div class="video-grid">
-            <div class="video-item photo-item" onclick="openVideo('3QTMVksP2xI')">
-                <div class="video-cover">
-                    <img src="https://img.youtube.com/vi/3QTMVksP2xI/maxresdefault.jpg" alt="Cinema 1">
-                    <div class="play-icon">
-                        <svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
-                    </div>
-                </div>
-                <div class="video-info">
-                    <h3>雨中的車泊紀錄：北海岸金山</h3>
-                    <p>Cinematic ASMR / No Voiceover</p>
-                </div>
-            </div>
-            <div class="video-item photo-item" onclick="openVideo('dQw4w9WgXcQ')"> <div class="video-cover">
-                    <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg" alt="Cinema 2">
-                    <div class="play-icon">
-                        <svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
-                    </div>
-                </div>
-                <div class="video-info">
-                    <h3>宜蘭地景攝影：野徑微光</h3>
-                    <p>Nature Documentary / 4K Cinematic</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <section id="interior" class="works-section interior-section">
         <h2 class="section-title">INTERIOR DESIGN</h2>
         <p class="section-subtitle">線條、空間與光影的對話</p>
@@ -354,9 +328,39 @@
         </div>
     </section>
 
-    <div id="lightbox">
-        <div id="lightbox-content">
+    <section id="cinema" class="works-section video-section">
+        <h2 class="section-title">CINEMATIC SCENES</h2>
+        <p class="section-subtitle">影像、環境音與流浪的紀錄</p>
+        <div class="video-grid">
+            <div class="video-item photo-item" onclick="openVideo('3QTMVksP2xI')">
+                <div class="video-cover">
+                    <img src="https://img.youtube.com/vi/3QTMVksP2xI/maxresdefault.jpg" alt="Cinema 1">
+                    <div class="play-icon">
+                        <svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <h3>雨中的車泊紀錄：北海岸金山</h3>
+                    <p>Cinematic ASMR / No Voiceover</p>
+                </div>
             </div>
+            <div class="video-item photo-item" onclick="openVideo('dQw4w9WgXcQ')">
+                <div class="video-cover">
+                    <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg" alt="Cinema 2">
+                    <div class="play-icon">
+                        <svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <h3>宜蘭地景攝影：野徑微光</h3>
+                    <p>Nature Documentary / 4K Cinematic</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="lightbox">
+        <div id="lightbox-content"></div>
     </div>
 
     <button id="back-to-top" title="回到頂部">
@@ -387,33 +391,27 @@
         }
     }
     
-    // 2. 效能優化 (自動播放/暫停 Hero 影片)
+    // 2. Hero 影片自動開關
     function startHeroObserver() {
         const heroObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (player && player.pauseVideo && player.playVideo) {
-                    if (entry.isIntersecting) {
-                        player.playVideo();
-                    } else {
-                        player.pauseVideo();
-                    }
+                    if (entry.isIntersecting) { player.playVideo(); } else { player.pauseVideo(); }
                 }
             });
         }, { threshold: 0 });
         heroObserver.observe(document.querySelector('.hero'));
     }
     
-    // 3. 主頁視差
+    // 3. 視差效果
     window.addEventListener('scroll', function() {
         const hero = document.querySelector('.hero');
         const heroContent = document.getElementById('heroContent');
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        
         if (scrollTop > 0) {
             hero.style.transform = `translateY(-${scrollTop * 0.4}px)`;
             let blurVal = Math.min(scrollTop / 60, 10);
             hero.style.filter = `blur(${blurVal}px)`;
-            
             let opacity = 1 - (scrollTop / 500); 
             heroContent.style.opacity = opacity >= 0 ? opacity : 0;
             heroContent.style.transform = `translateY(-${scrollTop * 0.1}px)`;
@@ -425,7 +423,7 @@
         }
     });
     
-    // 4. 作品集捲動浮現效果
+    // 4. 捲動浮現效果
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -438,10 +436,7 @@
                 entry.target.style.filter = "blur(5px)";
             }
         });
-    }, { 
-        threshold: 0.1,  
-        rootMargin: "0px 0px -50px 0px" 
-    });
+    }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
     
     document.querySelectorAll('.photo-item').forEach(item => {
         item.style.opacity = "0";
@@ -451,11 +446,10 @@
         observer.observe(item);
     });
 
-    // 5. 升級後的彈窗邏輯 (整合圖片與影片)
+    // 5. 彈窗邏輯
     const lightbox = document.getElementById('lightbox');
     const lightboxContent = document.getElementById('lightbox-content');
     
-    // 照片點擊事件
     document.querySelectorAll('.photo-grid .photo-item img').forEach(img => {
         img.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -463,7 +457,6 @@
         });
     });
 
-    // 影片點擊呼叫函式
     function openVideo(id) {
         const iframeHtml = `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
         openLightbox(iframeHtml);
@@ -488,19 +481,13 @@
         }, 500); 
     });
 
-    // 6. 回到頂部按鈕邏輯
+    // 6. 回到頂部
     const backToTopBtn = document.getElementById('back-to-top');
     window.addEventListener('scroll', () => {
-        if (window.pageYOffset > window.innerHeight / 2) {
-            backToTopBtn.classList.add('show');
-        } else {
-            backToTopBtn.classList.remove('show');
-        }
+        if (window.pageYOffset > window.innerHeight / 2) { backToTopBtn.classList.add('show'); } 
+        else { backToTopBtn.classList.remove('show'); }
     });
-
-    backToTopBtn.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
+    backToTopBtn.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
     </script>
 </body>
 </html>
