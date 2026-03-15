@@ -167,7 +167,7 @@
         .video-grid {
             display: grid;
             grid-auto-flow: column;
-            grid-auto-columns: calc((100% - 40px) / 3); /* 每排顯示三個，扣除間距 */
+            grid-auto-columns: calc((100% - 40px) / 3); /* 每排顯示三個 */
             gap: 20px;
             max-width: none;
             margin: 0;
@@ -191,23 +191,24 @@
         }
         .video-item:hover .video-cover img { transform: scale(1.05); opacity: 0.9; }
         .video-item:hover .play-icon { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
-        /* --- 優化後的影片資訊文字樣式 --- */
+        
+        /* --- 影片資訊文字樣式 (保留使用者要求不改) --- */
         .video-info { 
-            margin-top: 10px;    /* 靠近縮圖 */
+            margin-top: 10px;
             text-align: left;
-            padding-left: 15px; /* 左邊預留空白 */
-            background-color: transparent; /* 確保沒有淺灰底色 */
+            padding-left: 15px; 
+            background-color: transparent;
         }
         .video-info h3 { 
-            font-size: 1.1rem;     /* 標題稍微放大 */
-            font-weight: 500;      /* 增加一點粗細 */
-            letter-spacing: 3px;   /* 增加字距提升質感 */
+            font-size: 1.1rem;
+            font-weight: 500;
+            letter-spacing: 3px;
             color: #FFF; 
-            margin-bottom: 2px;    /* 與下方英文距離靠近 */
+            margin-bottom: 2px;
         }
         .video-info p { 
-            font-size: 0.85rem;    /* 英文大小微調 */
-            color: #AAAAAA;        /* 英文顏色調暗一點 */
+            font-size: 0.85rem;
+            color: #AAAAAA;
             letter-spacing: 1px;
             font-weight: 300;
         }
@@ -431,7 +432,7 @@
                             <p>Wild Camping Diary / 4K Cinematic</p>
                         </div>
                     </div>
-                        <div class="video-item photo-item" onclick="openVideo('J7vEna9qweM')">
+                    <div class="video-item photo-item" onclick="openVideo('J7vEna9qweM')">
                         <div class="video-cover">
                             <img src="https://img.youtube.com/vi/J7vEna9qweM/maxresdefault.jpg" alt="Cinema 1">
                             <div class="play-icon">
@@ -443,7 +444,7 @@
                             <p>Drone footage / CINEMATIC VIDEO</p>
                         </div>
                     </div>
-                          <div class="video-item photo-item" onclick="openVideo('eQ45DZpBrko')">
+                    <div class="video-item photo-item" onclick="openVideo('eQ45DZpBrko')">
                         <div class="video-cover">
                             <img src="https://img.youtube.com/vi/eQ45DZpBrko/maxresdefault.jpg" alt="Cinema 1">
                             <div class="play-icon">
@@ -455,7 +456,7 @@
                             <p>CINEMATIC VIDEO / 2020 Award-Winning Short Film</p>
                         </div>
                     </div>  
-                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -524,14 +525,15 @@
         }
     });
     
-    // 4. 捲動浮現效果
+    // 4. 捲動浮現效果 (修正：所有項目統一由下往上，不影響 Slider 左右滑動)
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.style.opacity = "1";
-                entry.target.style.transform = "translateY(0)";
+                entry.target.style.transform = "translateY(0)"; // 統一回復到原位
                 entry.target.style.filter = "blur(0px)";
             } else {
+                // 當不在視窗時，設為下方偏移
                 entry.target.style.opacity = "0";
                 entry.target.style.transform = "translateY(50px)";
                 entry.target.style.filter = "blur(5px)";
@@ -539,9 +541,10 @@
         });
     }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
     
+    // 統一針對 photo-item (包含相片與影片) 初始化
     document.querySelectorAll('.photo-item').forEach(item => {
         item.style.opacity = "0";
-        item.style.transform = "translateY(50px)";
+        item.style.transform = "translateY(50px)"; // 初始位置都在下方
         item.style.filter = "blur(5px)";
         item.style.transition = "all 1s cubic-bezier(0.2, 1, 0.3, 1)";
         observer.observe(item);
@@ -590,7 +593,7 @@
     });
     backToTopBtn.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
 
-    // 7. 影片滑動邏輯 (修正箭頭狀態監控)
+    // 7. 影片滑動邏輯 (維持原本左右滑動功能)
     const videoWrapper = document.getElementById('videoWrapper');
     
     function moveSlider(direction) {
@@ -604,16 +607,11 @@
     videoWrapper.addEventListener('scroll', () => {
         const prevBtn = document.getElementById('slidePrev');
         const nextBtn = document.getElementById('slideNext');
-        
-        // 檢查是否在起始處
         prevBtn.disabled = videoWrapper.scrollLeft <= 10;
-        
-        // 檢查是否在結尾處
         const isEnd = videoWrapper.scrollLeft + videoWrapper.clientWidth >= videoWrapper.scrollWidth - 10;
         nextBtn.disabled = isEnd;
     });
 
-    // 初始化按鈕
     window.addEventListener('load', () => {
         const prevBtn = document.getElementById('slidePrev');
         const nextBtn = document.getElementById('slideNext');
