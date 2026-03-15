@@ -153,7 +153,7 @@
 
         /* --- 影片滑動區塊樣式 (深度修改) --- */
         .video-carousel-container {
-            max-width: 1400px;
+            max-width: 1500px;
             margin: 0 auto;
             position: relative;
             /* 1. 放大與對齊：移除原本的 padding，確保左側切齊邊界 */
@@ -167,7 +167,7 @@
             content: "";
             position: absolute;
             top: 0;
-            width: 120px; /* 漸層寬度，控制露出下一張的多少 */
+            width: 80px; /* 漸層寬度，控制露出下一張的多少 */
             height: 100%;
             z-index: 10; /* 低於箭頭，高於縮圖 */
             pointer-events: none;
@@ -190,15 +190,15 @@
         .video-grid {
             /* 修改為 Flexbox 佈局以實作露出效果 */
             display: flex;
-            gap: 20px;
+            gap: 15px;
             padding: 0; 
             margin: 0;
         }
 
         .video-item { 
             /* 露出效果：讓縮圖寬度小於 100%/3，稍微露出下一張 */
-            flex: 0 0 calc((100% - 40px) / 3.05); /* 這裡控制露出多少 */
-            min-width: calc((100% - 40px) / 3.05);
+            flex: 0 0 calc((100% - 30px) / 3.2); /* 這裡控制露出多少 */
+            min-width: calc((100% - 30px) / 3.2);
             cursor: pointer; 
         }
         .video-cover { position: relative; aspect-ratio: 16/9; overflow: hidden; background: #1a1a1a; }
@@ -206,7 +206,7 @@
         
         .play-icon { 
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
-            opacity: 0.5; transition: all 0.5s ease; width: 60px; height: 60px;
+            opacity: 0.35; transition: all 0.5s ease; width: 60px; height: 60px;
         }
         .video-item:hover .video-cover img { transform: scale(1.05); opacity: 0.9; }
         .video-item:hover .play-icon { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
@@ -221,51 +221,51 @@
         .video-info h3 { font-size: 1.1rem; font-weight: 500; letter-spacing: 3px; color: #FFF; margin-bottom: 2px;}
         .video-info p { font-size: 0.85rem; color: #AAAAAA; letter-spacing: 1px; font-weight: 300;}
 
-        /* --- 箭頭內置與置頂樣式 --- */
+        /* --- 移除圓框，僅保留箭頭樣式 --- */
         .slider-arrow {
             position: absolute;
-            /* 定位在影片封面區域的中心，避開下方文字 */
-            top: 35%; 
+            top: 50%; /* 鎖定在影片縮圖中心 */
             transform: translateY(-50%);
             
-            /* 極簡置頂樣式：毛玻璃質感 */
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: white;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            cursor: pointer;
+            /* 1. 移除背景與邊框 */
+            background: transparent;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border: none;
             
-            /* 關鍵：確保在漸層 (z-index: 10) 之上 */
+            /* 2. 設定箭頭顏色與大小 */
+            color: rgba(255, 255, 255, 0.7); /* 平時半透明 */
+            width: 40px;
+            height: 60px; /* 拉高感應區域方便點擊 */
+            cursor: pointer;
             z-index: 100; 
             
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
+            
+            /* 3. 加上淡淡的文字陰影，防止在亮色背景看不見箭頭 */
+            filter: drop-shadow(0 0 5px rgba(0,0,0,0.5));
         }
 
         /* 箭頭位置移至縮圖內側 */
         .slider-arrow.prev { left: 20px; }
         .slider-arrow.next { right: 20px; }
 
+        /* 滑鼠移上去時變亮並稍微放大 */
         .slider-arrow:hover { 
-            background: rgba(255, 255, 255, 0.2); 
-            transform: translateY(-50%) scale(1.1);
-            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: rgba(255, 255, 255, 1);
+            transform: translateY(-50%) scale(1.2);
         }
 
+        /* 隱藏預設按鈕外觀 */
+        .slider-arrow:focus { outline: none; }
+
         .slider-arrow svg {
-            width: 20px;
-            height: 20px;
-            fill: none;
-            stroke: currentColor;
-            stroke-width: 2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
+            width: 30px; 
+            height: 30px;
+            stroke-width: 1.5px; /* 線條不要太粗，維持簡約感 */
         }
 
         /* 當無法再滑動時，優雅地隱藏箭頭 */
