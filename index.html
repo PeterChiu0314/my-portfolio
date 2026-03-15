@@ -241,70 +241,89 @@
     </section>
 
     <script>
-        // 1. YouTube IFrame API
-        var tag = document.createElement('script');
-        tag.src = "https://www.youtube.com/iframe_api";
-        var firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-        var player;
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('hero-video', {
-                events: { 'onStateChange': onPlayerStateChange }
-            });
-        }
-
-        function onPlayerStateChange(event) {
-            if (event.data == YT.PlayerState.PLAYING) {
-                const loader = document.getElementById('loading-screen');
-                setTimeout(() => { loader.classList.add('fade-out'); }, 1000); 
-            }
-        }
-
-        // 2. 主頁視差、模糊與淡出特效
-        window.addEventListener('scroll', function() {
-            const hero = document.querySelector('.hero');
-            const heroContent = document.getElementById('heroContent');
-            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            
-            if (scrollTop > 0) {
-                // 整個背景區位移 (0.4倍速)
-                hero.style.transform = `translateY(-${scrollTop * 0.4}px)`;
-                
-                // 加入漸變模糊 (最高到 10px)
-                let blurVal = Math.min(scrollTop / 60, 10);
-                hero.style.filter = `blur(${blurVal}px)`;
-                
-                // 標題淡出與微位移
-                let opacity = 1 - (scrollTop / 500); 
-                heroContent.style.opacity = opacity >= 0 ? opacity : 0;
-                heroContent.style.transform = `translateY(-${scrollTop * 0.1}px)`;
-            } else {
-                hero.style.transform = `translateY(0px)`;
-                hero.style.filter = `blur(0px)`;
-                heroContent.style.opacity = 1;
-                heroContent.style.transform = `translateY(0px)`;
-            }
+    // 1. YouTube IFrame API
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    
+    var player;
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('hero-video', {
+            events: { 'onStateChange': onPlayerStateChange }
         });
-
-        // 3. 作品集捲動浮現效果
-        const observer = new IntersectionObserver((entries) => {
+    }
+    
+    function onPlayerStateChange(event) {
+        if (event.data == YT.PlayerState.PLAYING) {
+            const loader = document.getElementById('loading-screen');
+            setTimeout(() => { loader.classList.add('fade-out'); }, 200); 
+            
+            // --- 新增：啟動效能監控觀察器 ---
+            startHeroObserver();
+        }
+    }
+    
+    // 2. 效能優化：當 Hero 區塊離開視窗時自動暫停影片
+    function startHeroObserver() {
+        const heroObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = "1";
-                    entry.target.style.transform = "translateY(0)";
-                    entry.target.style.filter = "blur(0px)";
+                // 確保播放器已經準備好
+                if (player && player.pauseVideo && player.playVideo) {
+                    if (entry.isIntersecting) {
+                        // 畫面回到頂部：恢復播放
+                        player.playVideo();
+                    } else {
+                        // 主頁完全消失：暫停播放以節省效能
+                        player.pauseVideo();
+                    }
                 }
             });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.photo-item').forEach(item => {
-            item.style.opacity = "0";
-            item.style.transform = "translateY(50px)";
-            item.style.filter = "blur(5px)";
-            item.style.transition = "all 1s cubic-bezier(0.2, 1, 0.3, 1)";
-            observer.observe(item);
+        }, { threshold: 0 }); // 只要 hero 剩 0% 可見，就觸發暫停
+    
+        heroObserver.observe(document.querySelector('.hero'));
+    }
+    
+    // 3. 主頁視差、模糊與淡出特效
+    window.addEventListener('scroll', function() {
+        const hero = document.querySelector('.hero');
+        const heroContent = document.getElementById('heroContent');
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        if (scrollTop > 0) {
+            hero.style.transform = `translateY(-${scrollTop * 0.4}px)`;
+            let blurVal = Math.min(scrollTop / 60, 10);
+            hero.style.filter = `blur(${blurVal}px)`;
+            
+            let opacity = 1 - (scrollTop / 500); 
+            heroContent.style.opacity = opacity >= 0 ? opacity : 0;
+            heroContent.style.transform = `translateY(-${scrollTop * 0.1}px)`;
+        } else {
+            hero.style.transform = `translateY(0px)`;
+            hero.style.filter = `blur(0px)`;
+            heroContent.style.opacity = 1;
+            heroContent.style.transform = `translateY(0px)`;
+        }
+    });
+    
+    // 4. 作品集捲動浮現效果 (這部分維持原樣)
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = "1";
+                entry.target.style.transform = "translateY(0)";
+                entry.target.style.filter = "blur(0px)";
+            }
         });
+    }, { threshold: 0.1 });
+    
+    document.querySelectorAll('.photo-item').forEach(item => {
+        item.style.opacity = "0";
+        item.style.transform = "translateY(50px)";
+        item.style.filter = "blur(5px)";
+        item.style.transition = "all 1s cubic-bezier(0.2, 1, 0.3, 1)";
+        observer.observe(item);
+    });
     </script>
 </body>
 </html>
