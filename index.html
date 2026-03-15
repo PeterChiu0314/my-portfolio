@@ -151,44 +151,76 @@
         .tall { grid-column: span 1; grid-row: span 2; }
         .wide { grid-column: span 2; grid-row: span 1; }
 
-        /* --- 彈窗優化樣式 --- */
+        /* --- 深度優化彈窗動畫 --- */
         #lightbox {
             display: none;
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background: rgba(10, 10, 10, 0.8); /* 透明度 80% */
-            backdrop-filter: blur(15px); /* 背景模糊效果 */
-            -webkit-backdrop-filter: blur(15px);
+            background: rgba(10, 10, 10, 0); 
+            backdrop-filter: blur(0px); 
+            -webkit-backdrop-filter: blur(0px);
             z-index: 1000;
             cursor: zoom-out;
             justify-content: center;
             align-items: center;
-            opacity: 0;
-            transition: opacity 0.5s ease;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
+            will-change: backdrop-filter, background; 
         }
-        #lightbox.active { display: flex; opacity: 1; }
+        
+        #lightbox.active {
+            display: flex;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
         
         #lightbox img {
             max-width: 90%;
             max-height: 90%;
             object-fit: contain;
-            box-shadow: 0 0 50px rgba(0,0,0,0.3);
-            
-            /* 微動畫起始狀態：縮小且輕微位移 */
-            transform: scale(0.85) translateY(20px);
-            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 10px 50px rgba(0,0,0,0.5);
+            transform: scale(0.7) translateY(30px); 
+            opacity: 0;
+            transition: transform 0.7s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.5s ease;
+            will-change: transform;
         }
-        #lightbox.active img { 
-            /* 點擊後放大並回正 */
-            transform: scale(1) translateY(0); 
+        
+        #lightbox.active img {
+            transform: scale(1) translateY(0);
+            opacity: 1;
         }
 
-        @media (max-width: 768px) {
-            nav { padding: 20px 30px; }
-            .photo-grid { grid-template-columns: 1fr; grid-auto-rows: 300px; }
-            .large, .tall, .wide { grid-column: span 1; grid-row: span 1; }
-            .hero-title { font-size: 2.2rem; letter-spacing: 8px; }
+        /* --- 回到頂部按鈕樣式 (新增) --- */
+        #back-to-top {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: #FFFFFF;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        #back-to-top:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+        }
+        #back-to-top.show {
+            opacity: 1;
+            visibility: visible;
         }
     </style>
 </head>
@@ -271,6 +303,12 @@
 
     <div id="lightbox"><img id="lightbox-img" src=""></div>
 
+    <button id="back-to-top" title="回到頂部">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+    </button>
+
     <script>
     // 1. YouTube IFrame API
     var tag = document.createElement('script');
@@ -331,16 +369,23 @@
         }
     });
     
-    // 4. 作品集捲動浮現
+    // 4. 作品集捲動浮現效果 (優化為重複觸發)
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.style.opacity = "1";
                 entry.target.style.transform = "translateY(0)";
                 entry.target.style.filter = "blur(0px)";
+            } else {
+                entry.target.style.opacity = "0";
+                entry.target.style.transform = "translateY(50px)";
+                entry.target.style.filter = "blur(5px)";
             }
         });
-    }, { threshold: 0.1 });
+    }, { 
+        threshold: 0.1,  
+        rootMargin: "0px 0px -50px 0px" 
+    });
     
     document.querySelectorAll('.photo-item').forEach(item => {
         item.style.opacity = "0";
@@ -350,21 +395,44 @@
         observer.observe(item);
     });
 
-    // 5. 彈窗邏輯
+    // 5. 深度優化彈窗邏輯
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightbox-img');
-
+    
     document.querySelectorAll('.photo-item img').forEach(img => {
-        img.addEventListener('click', () => {
+        img.addEventListener('click', (e) => {
+            e.stopPropagation();
+            lightbox.style.display = 'flex';
+            void lightbox.offsetWidth; 
             lightboxImg.src = img.src;
             lightbox.classList.add('active');
             document.body.style.overflow = 'hidden';
         });
     });
-
+    
     lightbox.addEventListener('click', () => {
         lightbox.classList.remove('active');
         document.body.style.overflow = 'auto';
+        setTimeout(() => {
+            if (!lightbox.classList.contains('active')) {
+                lightbox.style.display = 'none';
+                lightboxImg.src = ''; 
+            }
+        }, 500); 
+    });
+
+    // 6. 回到頂部按鈕邏輯 (新增)
+    const backToTopBtn = document.getElementById('back-to-top');
+    window.addEventListener('scroll', () => {
+        if (window.pageYOffset > window.innerHeight / 2) {
+            backToTopBtn.classList.add('show');
+        } else {
+            backToTopBtn.classList.remove('show');
+        }
+    });
+
+    backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     });
     </script>
 </body>
