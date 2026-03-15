@@ -151,15 +151,35 @@
         .tall { grid-column: span 1; grid-row: span 2; }
         .wide { grid-column: span 2; grid-row: span 1; }
 
-        /* --- 影片滑動區塊樣式 --- */
+        /* --- 影片滑動區塊樣式 (深度修改) --- */
         .video-carousel-container {
             max-width: 1400px;
             margin: 0 auto;
             position: relative;
-            padding: 0 50px;
-            /* 這裡加入左右邊界的漸層效果 */
-            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
-            mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+            /* 1. 放大與對齊：移除原本的 padding，確保左側切齊邊界 */
+            padding: 0; 
+            overflow: visible; 
+        }
+
+        /* 2. 漸層過度：在縮圖上方加入左右漸層遮罩，讓邊緣滑入時消失 */
+        .video-carousel-container::before,
+        .video-carousel-container::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            width: 120px; /* 漸層寬度，控制露出下一張的多少 */
+            height: 100%;
+            z-index: 10; /* 低於箭頭，高於縮圖 */
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+        .video-carousel-container::before {
+            left: 0;
+            background: linear-gradient(to right, #121212 0%, rgba(18,18,18,0) 100%);
+        }
+        .video-carousel-container::after {
+            right: 0;
+            background: linear-gradient(to left, #121212 0%, rgba(18,18,18,0) 100%);
         }
 
         .video-slider-wrapper {
@@ -168,41 +188,21 @@
         }
 
         .video-grid {
-            display: grid;
-            grid-auto-flow: column;
-            grid-auto-columns: calc((100% - 40px) / 3);
+            /* 修改為 Flexbox 佈局以實作露出效果 */
+            display: flex;
             gap: 20px;
-            max-width: none;
+            padding: 0; 
             margin: 0;
         }
 
-        @media (max-width: 1024px) {
-            .video-grid { grid-auto-columns: calc((100% - 20px) / 2); }
+        .video-item { 
+            /* 露出效果：讓縮圖寬度小於 100%/3，稍微露出下一張 */
+            flex: 0 0 calc((100% - 40px) / 3.05); /* 這裡控制露出多少 */
+            min-width: calc((100% - 40px) / 3.05);
+            cursor: pointer; 
         }
-        @media (max-width: 600px) {
-            .video-grid { grid-auto-columns: 100%; }
-            .video-carousel-container { padding: 0 10px; }
-        }
-
-        .video-item.photo-item {
-            background-color: transparent !important; 
-            cursor: pointer;
-        }
-
-        .video-cover { 
-            position: relative; 
-            aspect-ratio: 16/9; 
-            overflow: hidden; 
-            background: #1a1a1a; 
-        }
-
-        .video-cover img { 
-            width: 100%; 
-            height: 100%; 
-            object-fit: cover; 
-            opacity: 0.7; 
-            transition: all 0.8s ease; 
-        }
+        .video-cover { position: relative; aspect-ratio: 16/9; overflow: hidden; background: #1a1a1a; }
+        .video-cover img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; transition: all 0.8s ease; }
         
         .play-icon { 
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
@@ -211,57 +211,90 @@
         .video-item:hover .video-cover img { transform: scale(1.05); opacity: 0.9; }
         .video-item:hover .play-icon { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
         
-        /* --- 影片資訊文字樣式  --- */
+        /* 5. 影片下文字：無底色 (保留原本樣式不改) */
         .video-info { 
-            margin-top: 15px;
+            margin-top: 10px;
             text-align: left;
-            padding-left: 10px;
-            background: none !important;      /* 強制移除底色 */
-            background-color: transparent !important; /* 二次確認移除 */
-            border: none !important;          /* 移除可能的邊框 */
+            padding-left: 15px; 
+            background-color: transparent;
         }
+        .video-info h3 { font-size: 1.1rem; font-weight: 500; letter-spacing: 3px; color: #FFF; margin-bottom: 2px;}
+        .video-info p { font-size: 0.85rem; color: #AAAAAA; letter-spacing: 1px; font-weight: 300;}
 
-        .video-info h3 { 
-            font-size: 1.05rem;
-            font-weight: 500;
-            letter-spacing: 2px;
-            color: #FFF; 
-            margin-bottom: 4px;
-            background: none !important;
-        }
-
-        .video-info p { 
-            font-size: 0.8rem;
-            color: #888;
-            letter-spacing: 1px;
-            font-weight: 300;
-            background: none !important;
-        }
-
-        /* --- 方向標按鈕 --- */
+        /* --- 箭頭內置與置頂樣式 --- */
         .slider-arrow {
             position: absolute;
-            top: 50%;
+            /* 定位在影片封面區域的中心，避開下方文字 */
+            top: 35%; 
             transform: translateY(-50%);
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            
+            /* 極簡置頂樣式：毛玻璃質感 */
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             color: white;
             width: 45px;
             height: 45px;
             border-radius: 50%;
             cursor: pointer;
-            z-index: 20;
+            
+            /* 關鍵：確保在漸層 (z-index: 10) 之上 */
+            z-index: 100; 
+            
             display: flex;
             justify-content: center;
             align-items: center;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(5px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .slider-arrow:hover { background: rgba(255, 255, 255, 0.2); }
-        .slider-arrow.prev { left: -10px; }
-        .slider-arrow.next { right: -10px; }
-        .slider-arrow:disabled { opacity: 0.1; cursor: not-allowed; }
+        /* 箭頭位置移至縮圖內側 */
+        .slider-arrow.prev { left: 20px; }
+        .slider-arrow.next { right: 20px; }
+
+        .slider-arrow:hover { 
+            background: rgba(255, 255, 255, 0.2); 
+            transform: translateY(-50%) scale(1.1);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .slider-arrow svg {
+            width: 20px;
+            height: 20px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* 當無法再滑動時，優雅地隱藏箭頭 */
+        .slider-arrow:disabled { 
+            opacity: 0; 
+            pointer-events: none; 
+        }
+
+        /* 確保容器 overflow 不會切掉箭頭的陰影或動態 */
+        .video-carousel-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            padding: 0;
+            overflow: visible; 
+        }
+
+        /* 響應式優化 */
+        @media (max-width: 1500px) {
+            .video-carousel-container { padding: 0 50px; }
+            .slider-arrow.prev { left: 10px; }
+            .slider-arrow.next { right: 10px; }
+        }
+        @media (max-width: 1024px) {
+            .video-grid { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scroll-snap-type: x mandatory;}
+            .video-item { flex: 0 0 85%; min-width: 85%; scroll-snap-align: start;}
+            .video-carousel-container::before, .video-carousel-container::after { display: none; }
+            .slider-arrow { display: none; }
+        }
 
         /* --- 彈窗動畫與尺寸修正 --- */
         #lightbox {
