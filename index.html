@@ -156,7 +156,10 @@
             max-width: 1400px;
             margin: 0 auto;
             position: relative;
-            padding: 0 50px; /* 為箭頭預留空間 */
+            padding: 0 50px;
+            /* 這裡加入左右邊界的漸層效果 */
+            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+            mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
         }
 
         .video-slider-wrapper {
@@ -167,7 +170,7 @@
         .video-grid {
             display: grid;
             grid-auto-flow: column;
-            grid-auto-columns: calc((100% - 40px) / 3); /* 每排顯示三個 */
+            grid-auto-columns: calc((100% - 40px) / 3);
             gap: 20px;
             max-width: none;
             margin: 0;
@@ -181,9 +184,25 @@
             .video-carousel-container { padding: 0 10px; }
         }
 
-        .video-item { cursor: pointer; }
-        .video-cover { position: relative; aspect-ratio: 16/9; overflow: hidden; background: #1a1a1a; }
-        .video-cover img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; transition: all 0.8s ease; }
+        .video-item.photo-item {
+            background-color: transparent !important; 
+            cursor: pointer;
+        }
+
+        .video-cover { 
+            position: relative; 
+            aspect-ratio: 16/9; 
+            overflow: hidden; 
+            background: #1a1a1a; 
+        }
+
+        .video-cover img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            opacity: 0.7; 
+            transition: all 0.8s ease; 
+        }
         
         .play-icon { 
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
@@ -192,25 +211,31 @@
         .video-item:hover .video-cover img { transform: scale(1.05); opacity: 0.9; }
         .video-item:hover .play-icon { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
         
-        /* --- 影片資訊文字樣式 (保留使用者要求不改) --- */
+        /* --- 影片資訊文字樣式  --- */
         .video-info { 
-            margin-top: 10px;
+            margin-top: 15px;
             text-align: left;
-            padding-left: 15px; 
-            background-color: transparent;
+            padding-left: 10px;
+            background: none !important;      /* 強制移除底色 */
+            background-color: transparent !important; /* 二次確認移除 */
+            border: none !important;          /* 移除可能的邊框 */
         }
+
         .video-info h3 { 
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             font-weight: 500;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             color: #FFF; 
-            margin-bottom: 2px;
+            margin-bottom: 4px;
+            background: none !important;
         }
+
         .video-info p { 
-            font-size: 0.85rem;
-            color: #AAAAAA;
+            font-size: 0.8rem;
+            color: #888;
             letter-spacing: 1px;
             font-weight: 300;
+            background: none !important;
         }
 
         /* --- 方向標按鈕 --- */
