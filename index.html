@@ -181,6 +181,10 @@
             right: 0;
             background: linear-gradient(to left, #121212 0%, rgba(18,18,18,0) 100%);
         }
+        .video-carousel-container {
+            max-width: 1600px;
+            background-color: red !important; /* 暫時加入，看紅色區域有多寬 */
+        }
 
         .video-slider-wrapper {
             overflow: hidden;
@@ -197,8 +201,8 @@
 
         .video-item { 
             /* 露出效果：讓縮圖寬度小於 100%/3，稍微露出下一張 */
-            flex: 0 0 calc((100% - 30px) / 3.2); /* 這裡控制露出多少 */
-            min-width: calc((100% - 30px) / 3.2);
+            flex: 0 0 calc((100% - 45px) / 3.2); /* 這裡控制露出多少 */
+            min-width: calc((100% - 45px) / 3.2);
             cursor: pointer; 
         }
         .video-cover { position: relative; aspect-ratio: 16/9; overflow: hidden; background: #1a1a1a; }
