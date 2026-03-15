@@ -151,17 +151,40 @@
         .tall { grid-column: span 1; grid-row: span 2; }
         .wide { grid-column: span 2; grid-row: span 1; }
 
-        /* --- 影片網格樣式 --- */
-        .video-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 40px;
+        /* --- 影片滑動區塊樣式 --- */
+        .video-carousel-container {
             max-width: 1400px;
             margin: 0 auto;
+            position: relative;
+            padding: 0 50px; /* 為箭頭預留空間 */
         }
+
+        .video-slider-wrapper {
+            overflow: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-auto-flow: column;
+            grid-auto-columns: calc((100% - 40px) / 3); /* 每排顯示三個，扣除間距 */
+            gap: 20px;
+            max-width: none;
+            margin: 0;
+        }
+
+        @media (max-width: 1024px) {
+            .video-grid { grid-auto-columns: calc((100% - 20px) / 2); }
+        }
+        @media (max-width: 600px) {
+            .video-grid { grid-auto-columns: 100%; }
+            .video-carousel-container { padding: 0 10px; }
+        }
+
         .video-item { cursor: pointer; }
         .video-cover { position: relative; aspect-ratio: 16/9; overflow: hidden; background: #1a1a1a; }
         .video-cover img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; transition: all 0.8s ease; }
+        
         .play-icon { 
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
             opacity: 0.5; transition: all 0.5s ease; width: 60px; height: 60px;
@@ -171,6 +194,31 @@
         .video-info { margin-top: 15px; text-align: left; }
         .video-info h3 { font-size: 1rem; font-weight: 300; letter-spacing: 2px; color: #FFF; }
         .video-info p { font-size: 0.8rem; color: #666; margin-top: 5px; }
+
+        /* --- 方向標按鈕 --- */
+        .slider-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 20;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .slider-arrow:hover { background: rgba(255, 255, 255, 0.2); }
+        .slider-arrow.prev { left: -10px; }
+        .slider-arrow.next { right: -10px; }
+        .slider-arrow:disabled { opacity: 0.1; cursor: not-allowed; }
 
         /* --- 彈窗動畫與尺寸修正 --- */
         #lightbox {
@@ -331,30 +379,42 @@
     <section id="cinema" class="works-section video-section">
         <h2 class="section-title">CINEMATIC SCENES</h2>
         <p class="section-subtitle">影像、環境音與流浪的紀錄</p>
-        <div class="video-grid">
-            <div class="video-item photo-item" onclick="openVideo('3QTMVksP2xI')">
-                <div class="video-cover">
-                    <img src="https://img.youtube.com/vi/3QTMVksP2xI/maxresdefault.jpg" alt="Cinema 1">
-                    <div class="play-icon">
-                        <svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+        
+        <div class="video-carousel-container">
+            <button class="slider-arrow prev" id="slidePrev" onclick="moveSlider(-1)">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </button>
+            <button class="slider-arrow next" id="slideNext" onclick="moveSlider(1)">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+
+            <div class="video-slider-wrapper" id="videoWrapper">
+                <div class="video-grid" id="videoGrid">
+                    <div class="video-item photo-item" onclick="openVideo('3QTMVksP2xI')">
+                        <div class="video-cover">
+                            <img src="https://img.youtube.com/vi/3QTMVksP2xI/maxresdefault.jpg" alt="Cinema 1">
+                            <div class="play-icon">
+                                <svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                            </div>
+                        </div>
+                        <div class="video-info">
+                            <h3>雨中的車泊紀錄：北海岸金山</h3>
+                            <p>Cinematic ASMR / No Voiceover</p>
+                        </div>
                     </div>
-                </div>
-                <div class="video-info">
-                    <h3>雨中的車泊紀錄：北海岸金山</h3>
-                    <p>Cinematic ASMR / No Voiceover</p>
-                </div>
-            </div>
-            <div class="video-item photo-item" onclick="openVideo('dQw4w9WgXcQ')">
-                <div class="video-cover">
-                    <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg" alt="Cinema 2">
-                    <div class="play-icon">
-                        <svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                    <div class="video-item photo-item" onclick="openVideo('dQw4w9WgXcQ')">
+                        <div class="video-cover">
+                            <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg" alt="Cinema 2">
+                            <div class="play-icon">
+                                <svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                            </div>
+                        </div>
+                        <div class="video-info">
+                            <h3>宜蘭地景攝影：野徑微光</h3>
+                            <p>Nature Documentary / 4K Cinematic</p>
+                        </div>
                     </div>
-                </div>
-                <div class="video-info">
-                    <h3>宜蘭地景攝影：野徑微光</h3>
-                    <p>Nature Documentary / 4K Cinematic</p>
-                </div>
+                    </div>
             </div>
         </div>
     </section>
@@ -488,6 +548,41 @@
         else { backToTopBtn.classList.remove('show'); }
     });
     backToTopBtn.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+
+    // 7. 影片滑動邏輯 (修正箭頭狀態監控)
+    const videoWrapper = document.getElementById('videoWrapper');
+    
+    function moveSlider(direction) {
+        const scrollAmount = videoWrapper.clientWidth; 
+        videoWrapper.scrollBy({
+            left: direction * scrollAmount,
+            behavior: 'smooth'
+        });
+    }
+
+    videoWrapper.addEventListener('scroll', () => {
+        const prevBtn = document.getElementById('slidePrev');
+        const nextBtn = document.getElementById('slideNext');
+        
+        // 檢查是否在起始處
+        prevBtn.disabled = videoWrapper.scrollLeft <= 10;
+        
+        // 檢查是否在結尾處
+        const isEnd = videoWrapper.scrollLeft + videoWrapper.clientWidth >= videoWrapper.scrollWidth - 10;
+        nextBtn.disabled = isEnd;
+    });
+
+    // 初始化按鈕
+    window.addEventListener('load', () => {
+        const prevBtn = document.getElementById('slidePrev');
+        const nextBtn = document.getElementById('slideNext');
+        if(videoWrapper) {
+            prevBtn.disabled = true;
+            if(videoWrapper.scrollWidth <= videoWrapper.clientWidth) {
+                nextBtn.disabled = true;
+            }
+        }
+    });
     </script>
 </body>
 </html>
