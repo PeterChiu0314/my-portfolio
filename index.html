@@ -119,7 +119,7 @@
             mask-image: linear-gradient(to bottom, transparent 0%, black 150px);
         }
 
-        .interior-section {
+        .interior-section, .video-section {
             margin-top: 0; 
             padding-top: 0; 
             -webkit-mask-image: none;
@@ -151,6 +151,27 @@
         .tall { grid-column: span 1; grid-row: span 2; }
         .wide { grid-column: span 2; grid-row: span 1; }
 
+        /* --- 影片網格樣式 (新增) --- */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .video-item { cursor: pointer; }
+        .video-cover { position: relative; aspect-ratio: 16/9; overflow: hidden; background: #1a1a1a; }
+        .video-cover img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; transition: all 0.8s ease; }
+        .play-icon { 
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+            opacity: 0.5; transition: all 0.5s ease; width: 60px; height: 60px;
+        }
+        .video-item:hover .video-cover img { transform: scale(1.05); opacity: 0.9; }
+        .video-item:hover .play-icon { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+        .video-info { margin-top: 15px; text-align: left; }
+        .video-info h3 { font-size: 1rem; font-weight: 300; letter-spacing: 2px; color: #FFF; }
+        .video-info p { font-size: 0.8rem; color: #666; margin-top: 5px; }
+
         /* --- 深度優化彈窗動畫 --- */
         #lightbox {
             display: none;
@@ -170,28 +191,29 @@
         
         #lightbox.active {
             display: flex;
-            background: rgba(10, 10, 10, 0.8);
+            background: rgba(10, 10, 10, 0.9);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
         }
         
-        #lightbox img {
+        #lightbox-content {
             max-width: 90%;
             max-height: 90%;
-            object-fit: contain;
             box-shadow: 0 10px 50px rgba(0,0,0,0.5);
             transform: scale(0.7) translateY(30px); 
             opacity: 0;
             transition: transform 0.7s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.5s ease;
-            will-change: transform;
         }
         
-        #lightbox.active img {
+        #lightbox.active #lightbox-content {
             transform: scale(1) translateY(0);
             opacity: 1;
         }
 
-        /* --- 回到頂部按鈕樣式 (新增) --- */
+        #lightbox img, #lightbox iframe { width: 100%; height: 100%; object-fit: contain; }
+        #lightbox iframe { aspect-ratio: 16/9; width: 80vw; }
+
+        /* --- 回到頂部按鈕樣式 --- */
         #back-to-top {
             position: fixed;
             bottom: 40px;
@@ -232,6 +254,7 @@
         <div class="logo">PETER CHIU</div>
         <div class="nav-links">
             <a href="#nature">NATURE</a>
+            <a href="#cinema">CINEMA</a>
             <a href="#interior">INTERIOR</a>
             <a href="https://www.flickr.com/photos/peterchiu0314/" target="_blank">FLICKR</a>
         </div>
@@ -282,6 +305,36 @@
         </div>
     </section>
 
+    <section id="cinema" class="works-section video-section">
+        <h2 class="section-title">CINEMATIC SCENES</h2>
+        <p class="section-subtitle">影像、環境音與流浪的紀錄</p>
+        <div class="video-grid">
+            <div class="video-item photo-item" onclick="openVideo('3QTMVksP2xI')">
+                <div class="video-cover">
+                    <img src="https://img.youtube.com/vi/3QTMVksP2xI/maxresdefault.jpg" alt="Cinema 1">
+                    <div class="play-icon">
+                        <svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <h3>雨中的車泊紀錄：北海岸金山</h3>
+                    <p>Cinematic ASMR / No Voiceover</p>
+                </div>
+            </div>
+            <div class="video-item photo-item" onclick="openVideo('dQw4w9WgXcQ')"> <div class="video-cover">
+                    <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg" alt="Cinema 2">
+                    <div class="play-icon">
+                        <svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                    </div>
+                </div>
+                <div class="video-info">
+                    <h3>宜蘭地景攝影：野徑微光</h3>
+                    <p>Nature Documentary / 4K Cinematic</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section id="interior" class="works-section interior-section">
         <h2 class="section-title">INTERIOR DESIGN</h2>
         <p class="section-subtitle">線條、空間與光影的對話</p>
@@ -301,7 +354,10 @@
         </div>
     </section>
 
-    <div id="lightbox"><img id="lightbox-img" src=""></div>
+    <div id="lightbox">
+        <div id="lightbox-content">
+            </div>
+    </div>
 
     <button id="back-to-top" title="回到頂部">
         <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -331,7 +387,7 @@
         }
     }
     
-    // 2. 效能優化
+    // 2. 效能優化 (自動播放/暫停 Hero 影片)
     function startHeroObserver() {
         const heroObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -369,7 +425,7 @@
         }
     });
     
-    // 4. 作品集捲動浮現效果 (優化為重複觸發)
+    // 4. 作品集捲動浮現效果
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -395,20 +451,31 @@
         observer.observe(item);
     });
 
-    // 5. 深度優化彈窗邏輯
+    // 5. 升級後的彈窗邏輯 (整合圖片與影片)
     const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightbox-img');
+    const lightboxContent = document.getElementById('lightbox-content');
     
-    document.querySelectorAll('.photo-item img').forEach(img => {
+    // 照片點擊事件
+    document.querySelectorAll('.photo-grid .photo-item img').forEach(img => {
         img.addEventListener('click', (e) => {
             e.stopPropagation();
-            lightbox.style.display = 'flex';
-            void lightbox.offsetWidth; 
-            lightboxImg.src = img.src;
-            lightbox.classList.add('active');
-            document.body.style.overflow = 'hidden';
+            openLightbox(`<img src="${img.src}">`);
         });
     });
+
+    // 影片點擊呼叫函式
+    function openVideo(id) {
+        const iframeHtml = `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+        openLightbox(iframeHtml);
+    }
+
+    function openLightbox(content) {
+        lightbox.style.display = 'flex';
+        void lightbox.offsetWidth; 
+        lightboxContent.innerHTML = content;
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
     
     lightbox.addEventListener('click', () => {
         lightbox.classList.remove('active');
@@ -416,12 +483,12 @@
         setTimeout(() => {
             if (!lightbox.classList.contains('active')) {
                 lightbox.style.display = 'none';
-                lightboxImg.src = ''; 
+                lightboxContent.innerHTML = ''; 
             }
         }, 500); 
     });
 
-    // 6. 回到頂部按鈕邏輯 (新增)
+    // 6. 回到頂部按鈕邏輯
     const backToTopBtn = document.getElementById('back-to-top');
     window.addEventListener('scroll', () => {
         if (window.pageYOffset > window.innerHeight / 2) {
