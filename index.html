@@ -54,7 +54,7 @@
 
         /* Hero 影片區 (背景層) */
         .hero {
-            position: fixed; /* 固定在背景 */
+            position: fixed;
             top: 0;
             left: 0;
             height: 100vh;
@@ -65,7 +65,7 @@
             align-items: center;
             text-align: center;
             z-index: 1;
-            will-change: transform, filter; /* 效能優化 */
+            will-change: transform, filter;
         }
 
         .video-background iframe {
@@ -108,20 +108,17 @@
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 0.8; transform: translateY(0); } }
 
-        /* --- 作品區塊整合 --- */
+        /* --- 作品區塊 --- */
         .works-section {
             position: relative;
             z-index: 10; 
-            margin-top: 100vh; /* 起始於螢幕下方 */
+            margin-top: 100vh;
             padding: 180px 40px;
             background-color: #121212;
-            
-            /* 1. 邊界羽化效果 */
             -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 150px);
             mask-image: linear-gradient(to bottom, transparent 0%, black 150px);
         }
 
-        /* 2. 連接作品區塊 (移除重複堆疊與羽化) */
         .interior-section {
             margin-top: 0; 
             padding-top: 0; 
@@ -132,7 +129,6 @@
         .section-title { font-size: 1.4rem; letter-spacing: 10px; text-align: center; color: #FFFFFF; font-weight: 300; margin-bottom: 15px; }
         .section-subtitle { font-size: 0.85rem; letter-spacing: 4px; text-align: center; color: #666; margin-bottom: 80px; }
 
-        /* 網格系統 */
         .photo-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -155,30 +151,38 @@
         .tall { grid-column: span 1; grid-row: span 2; }
         .wide { grid-column: span 2; grid-row: span 1; }
 
-        /* 彈窗樣式 */
+        /* --- 彈窗優化樣式 --- */
         #lightbox {
             display: none;
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background: rgba(10, 10, 10, 0.95);
+            background: rgba(10, 10, 10, 0.8); /* 透明度 80% */
+            backdrop-filter: blur(15px); /* 背景模糊效果 */
+            -webkit-backdrop-filter: blur(15px);
             z-index: 1000;
             cursor: zoom-out;
             justify-content: center;
             align-items: center;
             opacity: 0;
-            transition: opacity 0.4s ease;
+            transition: opacity 0.5s ease;
         }
         #lightbox.active { display: flex; opacity: 1; }
+        
         #lightbox img {
             max-width: 90%;
             max-height: 90%;
             object-fit: contain;
-            box-shadow: 0 0 50px rgba(0,0,0,0.5);
-            transform: scale(0.9);
-            transition: transform 0.4s cubic-bezier(0.2, 1, 0.3, 1);
+            box-shadow: 0 0 50px rgba(0,0,0,0.3);
+            
+            /* 微動畫起始狀態：縮小且輕微位移 */
+            transform: scale(0.85) translateY(20px);
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        #lightbox.active img { transform: scale(1); }
+        #lightbox.active img { 
+            /* 點擊後放大並回正 */
+            transform: scale(1) translateY(0); 
+        }
 
         @media (max-width: 768px) {
             nav { padding: 20px 30px; }
@@ -285,13 +289,11 @@
         if (event.data == YT.PlayerState.PLAYING) {
             const loader = document.getElementById('loading-screen');
             setTimeout(() => { loader.classList.add('fade-out'); }, 200); 
-            
-            // --- 啟動效能監控觀察器 ---
             startHeroObserver();
         }
     }
     
-    // 2. 效能優化：當 Hero 區塊離開視窗時自動暫停影片
+    // 2. 效能優化
     function startHeroObserver() {
         const heroObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -304,11 +306,10 @@
                 }
             });
         }, { threshold: 0 });
-    
         heroObserver.observe(document.querySelector('.hero'));
     }
     
-    // 3. 主頁視差、模糊與淡出特效
+    // 3. 主頁視差
     window.addEventListener('scroll', function() {
         const hero = document.querySelector('.hero');
         const heroContent = document.getElementById('heroContent');
@@ -330,7 +331,7 @@
         }
     });
     
-    // 4. 作品集捲動浮現效果
+    // 4. 作品集捲動浮現
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -349,7 +350,7 @@
         observer.observe(item);
     });
 
-    // --- 5. 新增：作品點擊彈窗邏輯 ---
+    // 5. 彈窗邏輯
     const lightbox = document.getElementById('lightbox');
     const lightboxImg = document.getElementById('lightbox-img');
 
@@ -357,13 +358,13 @@
         img.addEventListener('click', () => {
             lightboxImg.src = img.src;
             lightbox.classList.add('active');
-            document.body.style.overflow = 'hidden'; // 鎖定捲動
+            document.body.style.overflow = 'hidden';
         });
     });
 
     lightbox.addEventListener('click', () => {
         lightbox.classList.remove('active');
-        document.body.style.overflow = 'auto'; // 恢復捲動
+        document.body.style.overflow = 'auto';
     });
     </script>
 </body>
