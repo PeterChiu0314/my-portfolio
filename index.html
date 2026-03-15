@@ -52,7 +52,7 @@
         .nav-links a { color: #AAAAAA; text-decoration: none; margin-left: 30px; font-size: 0.9rem; letter-spacing: 2px; transition: color 0.3s; }
         .nav-links a:hover { color: #FFFFFF; }
 
-        /* --- 堆疊效果核心修改處 --- */
+        /* Hero 影片區 (背景層) */
         .hero {
             position: fixed; /* 固定在背景 */
             top: 0;
@@ -64,7 +64,8 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            z-index: 1; /* 置於底層 */
+            z-index: 1;
+            will-change: transform, filter; /* 效能優化 */
         }
 
         .video-background iframe {
@@ -86,7 +87,7 @@
             width: 100%;
             height: 100%;
             background: linear-gradient(to bottom, rgba(18,18,18,1) 0%, rgba(18,18,18,0) 25%, rgba(18,18,18,0) 75%, rgba(18,18,18,1) 100%);
-            z-index: 1;
+            z-index: 2;
         }
 
         .hero-content {
@@ -107,24 +108,29 @@
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 0.8; transform: translateY(0); } }
 
-        /* --- 作品區塊：滑上來蓋掉影片的關鍵 --- */
+        /* --- 作品區塊整合 --- */
         .works-section {
             position: relative;
-            z-index: 10; /* 比 hero 高，才能蓋住影片 */
-            margin-top: 100vh; /* 讓它起始於螢幕下方 */
+            z-index: 10; 
+            margin-top: 100vh; /* 起始於螢幕下方 */
             padding: 180px 40px;
-            background-color: #121212; /* 必須有實色背景 */
-            box-shadow: 0 -20px 60px rgba(0,0,0,0.8); /* 增加邊緣深度感 */
+            background-color: #121212;
+            
+            /* 1. 邊界羽化效果 */
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 150px);
+            mask-image: linear-gradient(to bottom, transparent 0%, black 150px);
+        }
+
+        /* 2. 連接作品區塊 (移除重複堆疊與羽化) */
+        .interior-section {
+            margin-top: 0; 
+            padding-top: 0; 
+            -webkit-mask-image: none;
+            mask-image: none;
         }
 
         .section-title { font-size: 1.4rem; letter-spacing: 10px; text-align: center; color: #FFFFFF; font-weight: 300; margin-bottom: 15px; }
         .section-subtitle { font-size: 0.85rem; letter-spacing: 4px; text-align: center; color: #666; margin-bottom: 80px; }
-
-        .interior-bg {
-            background-color: #181818; 
-            border-top: 1px solid #252525;
-            margin-top: 0; /* 只有第一個區塊需要 margin-top: 100vh */
-        }
 
         /* 網格系統 */
         .photo-grid {
@@ -203,21 +209,21 @@
         </div>
     </section>
 
-    <section id="interior" class="works-section interior-bg">
+    <section id="interior" class="works-section interior-section">
         <h2 class="section-title">INTERIOR DESIGN</h2>
         <p class="section-subtitle">線條、空間與光影的對話</p>
         <div class="photo-grid">
             <div class="photo-item tall">
-                <img src="你的室內攝影圖連結1" alt="Interior 1" loading="lazy">
+                <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2000" alt="Interior 1">
             </div>
             <div class="photo-item wide">
-                <img src="你的室內攝影圖連結2" alt="Interior 2" loading="lazy">
+                <img src="https://images.unsplash.com/photo-1616489953149-847d97607a72?q=80&w=2000" alt="Interior 2">
             </div>
             <div class="photo-item">
-                <img src="你的室內攝影圖連結3" alt="Interior 3" loading="lazy">
+                <img src="https://images.unsplash.com/photo-1615876234582-29a40df47a40?q=80&w=2000" alt="Interior 3">
             </div>
             <div class="photo-item tall">
-                <img src="你的室內攝影圖連結4" alt="Interior 4" loading="lazy">
+                <img src="https://images.unsplash.com/photo-1616137422495-1e9e47e217c2?q=80&w=2000" alt="Interior 4">
             </div>
         </div>
     </section>
@@ -239,24 +245,33 @@
         function onPlayerStateChange(event) {
             if (event.data == YT.PlayerState.PLAYING) {
                 const loader = document.getElementById('loading-screen');
-                // 這裡可以根據你想要標題先行或同時出現的需求調整
                 setTimeout(() => { loader.classList.add('fade-out'); }, 1000); 
             }
         }
 
-        // 2. 標題捲動特效（配合堆疊效果）
+        // 2. 主頁視差、模糊與淡出特效
         window.addEventListener('scroll', function() {
+            const hero = document.querySelector('.hero');
             const heroContent = document.getElementById('heroContent');
             let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
             
-            // 讓標題在作品區蓋上來之前，快速淡出並稍微上移
             if (scrollTop > 0) {
-                let opacity = 1 - (scrollTop / 400); // 在滑動 400px 內消失
+                // 整個背景區位移 (0.4倍速)
+                hero.style.transform = `translateY(-${scrollTop * 0.4}px)`;
+                
+                // 加入漸變模糊 (最高到 10px)
+                let blurVal = Math.min(scrollTop / 60, 10);
+                hero.style.filter = `blur(${blurVal}px)`;
+                
+                // 標題淡出與微位移
+                let opacity = 1 - (scrollTop / 500); 
                 heroContent.style.opacity = opacity >= 0 ? opacity : 0;
-                heroContent.style.transform = `translateY(-${scrollTop * 0.2}px) scale(${1 - scrollTop * 0.0005})`;
+                heroContent.style.transform = `translateY(-${scrollTop * 0.1}px)`;
             } else {
+                hero.style.transform = `translateY(0px)`;
+                hero.style.filter = `blur(0px)`;
                 heroContent.style.opacity = 1;
-                heroContent.style.transform = `translateY(0px) scale(1)`;
+                heroContent.style.transform = `translateY(0px)`;
             }
         });
 
@@ -267,10 +282,6 @@
                     entry.target.style.opacity = "1";
                     entry.target.style.transform = "translateY(0)";
                     entry.target.style.filter = "blur(0px)";
-                } else {
-                    entry.target.style.opacity = "0";
-                    entry.target.style.transform = "translateY(50px)";
-                    entry.target.style.filter = "blur(5px)";
                 }
             });
         }, { threshold: 0.1 });
