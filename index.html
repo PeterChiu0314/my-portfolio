@@ -191,9 +191,26 @@
         }
         .video-item:hover .video-cover img { transform: scale(1.05); opacity: 0.9; }
         .video-item:hover .play-icon { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
-        .video-info { margin-top: 15px; text-align: left; }
-        .video-info h3 { font-size: 1rem; font-weight: 300; letter-spacing: 2px; color: #FFF; }
-        .video-info p { font-size: 0.8rem; color: #666; margin-top: 5px; }
+        /* --- 優化後的影片資訊文字樣式 --- */
+        .video-info { 
+            margin-top: 10px;    /* 靠近縮圖 */
+            text-align: left;
+            padding-left: 15px; /* 左邊預留空白 */
+            background-color: transparent; /* 確保沒有淺灰底色 */
+        }
+        .video-info h3 { 
+            font-size: 1.1rem;     /* 標題稍微放大 */
+            font-weight: 500;      /* 增加一點粗細 */
+            letter-spacing: 3px;   /* 增加字距提升質感 */
+            color: #FFF; 
+            margin-bottom: 2px;    /* 與下方英文距離靠近 */
+        }
+        .video-info p { 
+            font-size: 0.85rem;    /* 英文大小微調 */
+            color: #AAAAAA;        /* 英文顏色調暗一點 */
+            letter-spacing: 1px;
+            font-weight: 300;
+        }
 
         /* --- 方向標按鈕 --- */
         .slider-arrow {
@@ -398,22 +415,46 @@
                             </div>
                         </div>
                         <div class="video-info">
-                            <h3>雨中的車泊紀錄：北海岸金山</h3>
-                            <p>Cinematic ASMR / No Voiceover</p>
+                            <h3>Honda FIT 車中泊改造計畫</h3>
+                            <p>Honda FIT Car Camping Conversion</p>
                         </div>
                     </div>
-                    <div class="video-item photo-item" onclick="openVideo('dQw4w9WgXcQ')">
+                    <div class="video-item photo-item" onclick="openVideo('ahLmj3RuP8w')">
                         <div class="video-cover">
-                            <img src="https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg" alt="Cinema 2">
+                            <img src="https://img.youtube.com/vi/ahLmj3RuP8w/maxresdefault.jpg" alt="Cinema 2">
                             <div class="play-icon">
                                 <svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
                             </div>
                         </div>
                         <div class="video-info">
-                            <h3>宜蘭地景攝影：野徑微光</h3>
-                            <p>Nature Documentary / 4K Cinematic</p>
+                            <h3>紅葉落下之時，橙色楓林裡的篝火與炊煙</h3>
+                            <p>Wild Camping Diary / 4K Cinematic</p>
                         </div>
                     </div>
+                        <div class="video-item photo-item" onclick="openVideo('J7vEna9qweM')">
+                        <div class="video-cover">
+                            <img src="https://img.youtube.com/vi/J7vEna9qweM/maxresdefault.jpg" alt="Cinema 1">
+                            <div class="play-icon">
+                                <svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                            </div>
+                        </div>
+                        <div class="video-info">
+                            <h3>暴風前夕 迷霧中的宜蘭</h3>
+                            <p>Drone footage / CINEMATIC VIDEO</p>
+                        </div>
+                    </div>
+                          <div class="video-item photo-item" onclick="openVideo('eQ45DZpBrko')">
+                        <div class="video-cover">
+                            <img src="https://img.youtube.com/vi/eQ45DZpBrko/maxresdefault.jpg" alt="Cinema 1">
+                            <div class="play-icon">
+                                <svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                            </div>
+                        </div>
+                        <div class="video-info">
+                            <h3>山麓茶鄉 | 2020冬山微電影</h3>
+                            <p>CINEMATIC VIDEO / 2020 Award-Winning Short Film</p>
+                        </div>
+                    </div>  
                     </div>
             </div>
         </div>
