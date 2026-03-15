@@ -18,7 +18,7 @@
             overflow-x: hidden;
         }
 
-        /* 影片載入遮罩：遮掉 YouTube 圈圈 */
+        /* 影片載入遮罩 */
         #loading-screen {
             position: fixed;
             top: 0;
@@ -27,18 +27,32 @@
             height: 100%;
             background-color: #121212;
             z-index: 9999;
-            transition: opacity 1.5s ease; /* 緩慢淡出增加高級感 */
+            transition: opacity 1.5s ease;
             pointer-events: none;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        #loading-screen.fade-out {
-            opacity: 0;
+        #loading-screen.fade-out { opacity: 0; }
+
+        /* 導覽列 */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 30px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
         }
 
-        /* 影片區與遮罩 */
+        .logo { font-size: 1.2rem; letter-spacing: 4px; color: #FFFFFF; }
+        .nav-links a { color: #AAAAAA; text-decoration: none; margin-left: 30px; font-size: 0.9rem; letter-spacing: 2px; transition: color 0.3s; }
+        .nav-links a:hover { color: #FFFFFF; }
+
+        /* Hero 影片區 */
         .hero {
             position: relative;
             height: 100vh;
@@ -68,34 +82,10 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(
-                to bottom, 
-                rgba(18, 18, 18, 1) 0%,      
-                rgba(18, 18, 18, 0.4) 10%,   
-                rgba(18, 18, 18, 0) 25%,     
-                rgba(18, 18, 18, 0) 75%,     
-                rgba(18, 18, 18, 0.4) 90%,   
-                rgba(18, 18, 18, 1) 100%     
-            );
+            background: linear-gradient(to bottom, rgba(18,18,18,1) 0%, rgba(18,18,18,0) 25%, rgba(18,18,18,0) 75%, rgba(18,18,18,1) 100%);
             z-index: 1;
         }
 
-        /* 導覽列 */
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 30px 60px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 100;
-        }
-
-        .logo { font-size: 1.2rem; letter-spacing: 4px; color: #FFFFFF; }
-        .nav-links a { color: #AAAAAA; text-decoration: none; margin-left: 30px; font-size: 0.9rem; letter-spacing: 2px; }
-
-        /* 標題進場動畫修正 */
         .hero-content {
             z-index: 5;
             position: relative;
@@ -107,60 +97,34 @@
             100% { opacity: 1; transform: translateY(0); }
         }
 
-        .hero-title {
-            font-size: 3.2rem;
-            font-weight: 300;
-            letter-spacing: 18px;
-            margin-bottom: 25px;
-            color: #FFFFFF;
-            text-shadow: 0 0 20px rgba(0,0,0,0.5);
-        }
-        
-        .hero-subtitle-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-            opacity: 0; 
-            animation: fadeIn 2s ease-out 0.8s forwards; 
-        }
-        
-        .hero-subtitle-en {
-            font-size: 0.9rem;
-            letter-spacing: 5px;
-            color: #AAAAAA;
-            text-transform: uppercase;
-        }
-        
-        .hero-subtitle-zh {
-            font-size: 1rem;
-            letter-spacing: 4px;
-            color: #D1D1D1;
-            font-weight: 300;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 0.8; transform: translateY(0); }
-        }
-        
-        @media (max-width: 768px) {
-            .hero-title { font-size: 2.2rem; letter-spacing: 8px; }
-            .hero-subtitle-zh { font-size: 0.85rem; padding: 0 20px; }
-        }
+        .hero-title { font-size: 3.2rem; font-weight: 300; letter-spacing: 18px; margin-bottom: 25px; color: #FFFFFF; }
+        .hero-subtitle-container { display: flex; flex-direction: column; align-items: center; gap: 12px; opacity: 0; animation: fadeIn 2s ease-out 0.8s forwards; }
+        .hero-subtitle-en { font-size: 0.9rem; letter-spacing: 5px; color: #888; text-transform: uppercase; }
+        .hero-subtitle-zh { font-size: 1rem; letter-spacing: 4px; color: #AAA; font-weight: 300; }
 
-        /* 作品區網格 */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 0.8; transform: translateY(0); } }
+
+        /* 通用作品區樣式 */
         .works-section {
+            padding: 180px 40px;
             background-color: #121212;
-            padding: 200px 40px;
-            margin-top: -10vh;   
         }
-        .section-title { font-size: 1.2rem; letter-spacing: 8px; text-align: center; margin-bottom: 80px; color: #FFFFFF; font-weight: 300; }
 
+        .section-title { font-size: 1.4rem; letter-spacing: 10px; text-align: center; color: #FFFFFF; font-weight: 300; margin-bottom: 15px; }
+        .section-subtitle { font-size: 0.85rem; letter-spacing: 4px; text-align: center; color: #666; margin-bottom: 80px; }
+
+        /* 室內攝影專屬背景與細節 */
+        .interior-bg {
+            background-color: #181818; /* 稍微與自然區區隔 */
+            border-top: 1px solid #252525;
+        }
+
+        /* 網格系統 */
         .photo-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            grid-auto-rows: 300px;
+            grid-auto-rows: 320px;
+            grid-auto-flow: dense; /* 自動填補空格 */
             gap: 20px;
             max-width: 1400px;
             margin: 0 auto;
@@ -168,22 +132,22 @@
 
         .photo-item { position: relative; overflow: hidden; background-color: #1a1a1a; }
         .photo-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 1s cubic-bezier(0.2, 1, 0.3, 1);
-            filter: grayscale(10%) brightness(0.8);
+            width: 100%; height: 100%; object-fit: cover;
+            transition: transform 1.2s cubic-bezier(0.2, 1, 0.3, 1);
+            filter: brightness(0.8) grayscale(10%);
         }
+        .photo-item:hover img { transform: scale(1.08); filter: brightness(1) grayscale(0%); }
 
-        .photo-item:hover img { transform: scale(1.1); filter: grayscale(0%) brightness(1.1); }
-
+        /* 格子形狀設定 */
         .large { grid-column: span 2; grid-row: span 2; }
         .tall { grid-column: span 1; grid-row: span 2; }
         .wide { grid-column: span 2; grid-row: span 1; }
 
         @media (max-width: 768px) {
+            nav { padding: 20px 30px; }
             .photo-grid { grid-template-columns: 1fr; grid-auto-rows: 300px; }
             .large, .tall, .wide { grid-column: span 1; grid-row: span 1; }
+            .hero-title { font-size: 2.2rem; letter-spacing: 8px; }
         }
     </style>
 </head>
@@ -194,15 +158,15 @@
     <nav>
         <div class="logo">PETER CHIU</div>
         <div class="nav-links">
-            <a href="#works">WORKS</a>
+            <a href="#nature">NATURE</a>
+            <a href="#interior">INTERIOR</a>
             <a href="https://www.flickr.com/photos/peterchiu0314/" target="_blank">FLICKR</a>
-            <a href="#">CONTACT</a>
         </div>
     </nav>
 
     <section class="hero">
         <div class="video-background">
-            <iframe id="hero-video" src="https://www.youtube.com/embed/3QTMVksP2xI?enablejsapi=1&autoplay=1&mute=1&loop=1&playlist=3QTMVksP2xI&start=11&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&origin=https://peterchiu0314.github.io" frameborder="0"></iframe>
+            <iframe id="hero-video" src="https://www.youtube.com/embed/3QTMVksP2xI?enablejsapi=1&autoplay=1&mute=1&loop=1&playlist=3QTMVksP2xI&start=11&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3" frameborder="0"></iframe>
             <div class="overlay"></div>
         </div>
         <div class="hero-content" id="heroContent">
@@ -214,29 +178,46 @@
         </div>
     </section>
 
-    <section id="works" class="works-section">
-        <h2 class="section-title">SELECTED WORKS</h2>
+    <section id="nature" class="works-section">
+        <h2 class="section-title">NATURE & TRAVEL</h2>
+        <p class="section-subtitle">野徑、微光與流浪的痕跡</p>
         <div class="photo-grid">
             <div class="photo-item large">
-                <img src="https://live.staticflickr.com/65535/54491742976_0c442c6b6b_k.jpg" alt="螢火蟲">
+                <img src="https://live.staticflickr.com/65535/54491742976_0c442c6b6b_k.jpg" alt="Nature 1">
             </div>
             <div class="photo-item">
-                <img src="https://live.staticflickr.com/65535/51596162175_9e698b7d0f_k.jpg" alt="車泊生活">
+                <img src="https://live.staticflickr.com/65535/51596162175_9e698b7d0f_k.jpg" alt="Nature 2">
             </div>
-            <div class="photo-item">
-                <img src="https://live.staticflickr.com/65535/53667814818_64d2005cf5_k.jpg" alt="富士山">
-            </div>            
             <div class="photo-item tall">
-                <img src="https://live.staticflickr.com/65535/54492009753_f3e57d4fb1_k.jpg" alt="Flickr 作品示範">
+                <img src="https://live.staticflickr.com/65535/53667814818_64d2005cf5_k.jpg" alt="Nature 3">
             </div>
             <div class="photo-item wide">
-                <img src="https://live.staticflickr.com/65535/54473516983_840fddefd4_k.jpg" alt="Flickr 作品示範">
+                <img src="https://live.staticflickr.com/65535/54473516983_840fddefd4_k.jpg" alt="Nature 4">
+            </div>
+        </div>
+    </section>
+
+    <section id="interior" class="works-section interior-bg">
+        <h2 class="section-title">INTERIOR DESIGN</h2>
+        <p class="section-subtitle">線條、空間與光影的對話</p>
+        <div class="photo-grid">
+            <div class="photo-item tall">
+                <img src="你的室內攝影圖連結1" alt="Interior 1" loading="lazy">
+            </div>
+            <div class="photo-item wide">
+                <img src="你的室內攝影圖連結2" alt="Interior 2" loading="lazy">
+            </div>
+            <div class="photo-item">
+                <img src="你的室內攝影圖連結3" alt="Interior 3" loading="lazy">
+            </div>
+            <div class="photo-item tall">
+                <img src="你的室內攝影圖連結4" alt="Interior 4" loading="lazy">
             </div>
         </div>
     </section>
 
     <script>
-        // 1. YouTube IFrame API 控制
+        // 1. YouTube IFrame API
         var tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
         var firstScriptTag = document.getElementsByTagName('script')[0];
@@ -245,30 +226,23 @@
         var player;
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('hero-video', {
-                events: {
-                    'onStateChange': onPlayerStateChange
-                }
+                events: { 'onStateChange': onPlayerStateChange }
             });
         }
 
         function onPlayerStateChange(event) {
-            // 當影片開始播放 (YT.PlayerState.PLAYING = 1)
             if (event.data == YT.PlayerState.PLAYING) {
                 const loader = document.getElementById('loading-screen');
-                // 緩衝完成後，淡出黑色遮罩
-                setTimeout(() => {
-                    loader.classList.add('fade-out');
-                }, 500); 
+                setTimeout(() => { loader.classList.add('fade-out'); }, 500); 
             }
         }
 
-        // 2. 處理標題淡出效果
+        // 2. 標題捲動特效
         window.addEventListener('scroll', function() {
             const heroContent = document.getElementById('heroContent');
             let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            
             if (scrollTop > 5) {
-                let opacity = 1 - (scrollTop / 450);
+                let opacity = 1 - (scrollTop / 500);
                 heroContent.style.opacity = opacity >= 0 ? opacity : 0;
                 heroContent.style.transform = `translateY(${scrollTop * 0.3}px)`;
             } else {
@@ -276,13 +250,8 @@
                 heroContent.style.transform = `translateY(0px)`;
             }
         });
-    
-        // 3. 處理作品集浮現效果
-        const observerOptions = {
-            threshold: 0.15,
-            rootMargin: "0px 0px -50px 0px"
-        };
-    
+
+        // 3. 作品集捲動浮現效果
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -291,17 +260,17 @@
                     entry.target.style.filter = "blur(0px)";
                 } else {
                     entry.target.style.opacity = "0";
-                    entry.target.style.transform = "translateY(60px)";
+                    entry.target.style.transform = "translateY(50px)";
                     entry.target.style.filter = "blur(5px)";
                 }
             });
-        }, observerOptions);
-    
+        }, { threshold: 0.1 });
+
         document.querySelectorAll('.photo-item').forEach(item => {
             item.style.opacity = "0";
-            item.style.transform = "translateY(60px)";
+            item.style.transform = "translateY(50px)";
             item.style.filter = "blur(5px)";
-            item.style.transition = "all 1.2s cubic-bezier(0.22, 1, 0.36, 1)";
+            item.style.transition = "all 1s cubic-bezier(0.2, 1, 0.3, 1)";
             observer.observe(item);
         });
     </script>
