@@ -80,12 +80,29 @@
             max-width: 1450px; width: 90%; margin: 0 auto 120px auto;
             position: relative; overflow: visible;
         }
-        .video-carousel-container::before, .video-carousel-container::after {
-            content: ""; position: absolute; top: 0; width: 100px; height: 100%;
-            z-index: 10; pointer-events: none;
+        /* --- 替換為這個新的樣式 --- */
+        .gradient-mask {
+            position: absolute;
+            top: 0;
+            width: 100px;
+            /* 關鍵：高度設為 60%，這樣漸層只會出現在影片封面上，不會遮到下方的標題文字 */
+            height: 60%; 
+            z-index: 10;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
         }
-        .video-carousel-container::before { left: 0; background: linear-gradient(to right, #121212 0%, rgba(18,18,18,0) 100%); }
-        .video-carousel-container::after { right: 0; background: linear-gradient(to left, #121212 0%, rgba(18,18,18,0) 100%); }
+        
+        #mask-left {
+            left: 0;
+            background: linear-gradient(to right, #121212 0%, rgba(18,18,18,0) 100%);
+            opacity: 0; /* 初始隱藏 */
+        }
+        
+        #mask-right {
+            right: 0;
+            background: linear-gradient(to left, #121212 0%, rgba(18,18,18,0) 100%);
+            opacity: 1; /* 初始顯示 */
+        }
 
         .video-slider-wrapper { width: 100%; overflow: hidden; scroll-behavior: smooth; }
         .video-grid { display: flex; gap: 20px; padding: 0; margin: 0; }
@@ -197,6 +214,9 @@
             <p class="section-subtitle">影像、環境音與流浪的紀錄</p>
             
             <div class="video-carousel-container">
+                <div id="mask-left" class="gradient-mask"></div>
+                <div id="mask-right" class="gradient-mask"></div>
+                
                 <button class="slider-arrow prev" onclick="moveSlider(-1)"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
                 <button class="slider-arrow next" onclick="moveSlider(1)"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
 
@@ -339,6 +359,39 @@
             };
         });
 
+        // 監聽影片區塊滑動，決定漸層顯示或消失
+    function updateGradients() {
+        const wrapper = document.getElementById('videoWrapper');
+        const maskLeft = document.getElementById('mask-left');
+        const maskRight = document.getElementById('mask-right');
+    
+        // 當滑動距離大於 10px 時才顯示左漸層
+        if (wrapper.scrollLeft > 10) {
+            maskLeft.style.opacity = '1';
+        } else {
+            maskLeft.style.opacity = '0';
+        }
+    
+        // 當滑到最右邊（容許 10px 誤差）時隱藏右漸層
+        const isAtEnd = wrapper.scrollLeft + wrapper.clientWidth >= wrapper.scrollWidth - 10;
+        if (isAtEnd) {
+            maskRight.style.opacity = '0';
+        } else {
+            maskRight.style.opacity = '1';
+        }
+    }
+    
+    // 在頁面載入後綁定事件
+    window.addEventListener('DOMContentLoaded', () => {
+        const wrapper = document.getElementById('videoWrapper');
+        
+        // 綁定捲動事件
+        wrapper.addEventListener('scroll', updateGradients);
+        
+        // 初始化呼叫一次，確保狀態正確
+        updateGradients();
+    });
+
         const btt = document.getElementById('back-to-top');
         window.addEventListener('scroll', () => {
             if (window.scrollY > 500) btt.classList.add('show');
@@ -357,4 +410,5 @@
     </script>
 </body>
 </html>
+
 
