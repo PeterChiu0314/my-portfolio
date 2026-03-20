@@ -75,27 +75,21 @@
         .section-title { font-size: 1.4rem; letter-spacing: 10px; text-align: center; color: #FFFFFF; font-weight: 300; margin-bottom: 15px; }
         .section-subtitle { font-size: 0.85rem; letter-spacing: 4px; text-align: center; color: #666; margin-bottom: 80px; }
 
-        /* --- 修正 4 & 3: 影片區寬度 1450 與 漸層效果 --- */
+        /* 影片滑動區 */
         .video-carousel-container {
             max-width: 1450px; width: 90%; margin: 0 auto 120px auto;
             position: relative; overflow: visible;
         }
-        /* 左右漸層遮罩 */
         .video-carousel-container::before, .video-carousel-container::after {
             content: ""; position: absolute; top: 0; width: 100px; height: 100%;
             z-index: 10; pointer-events: none;
         }
-        .video-carousel-container::before {
-            left: 0; background: linear-gradient(to right, #121212 0%, rgba(18,18,18,0) 100%);
-        }
-        .video-carousel-container::after {
-            right: 0; background: linear-gradient(to left, #121212 0%, rgba(18,18,18,0) 100%);
-        }
+        .video-carousel-container::before { left: 0; background: linear-gradient(to right, #121212 0%, rgba(18,18,18,0) 100%); }
+        .video-carousel-container::after { right: 0; background: linear-gradient(to left, #121212 0%, rgba(18,18,18,0) 100%); }
 
         .video-slider-wrapper { width: 100%; overflow: hidden; scroll-behavior: smooth; }
         .video-grid { display: flex; gap: 20px; padding: 0; margin: 0; }
 
-        /* 配合 1450px 的比例 */
         .video-item { flex: 0 0 calc((100% - 60px) / 3.2); min-width: calc((100% - 60px) / 3.2); cursor: pointer; }
         .video-cover { position: relative; aspect-ratio: 16/9; overflow: hidden; background: #1a1a1a; }
         .video-cover img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; transition: all 0.8s ease; }
@@ -111,9 +105,8 @@
         .video-info h3 { font-size: 1.05rem; letter-spacing: 2px; color: #FFF; margin-bottom: 5px;}
         .video-info p { font-size: 0.8rem; color: #666; letter-spacing: 1px; }
 
-        /* --- 修正 2: 箭頭垂直對準影片中央 --- */
         .slider-arrow {
-            position: absolute; top: 28%; /* 根據 16/9 比例估算封面的垂直中心點 */
+            position: absolute; top: 28%; 
             transform: translateY(-50%); background: transparent; border: none; 
             color: rgba(255, 255, 255, 0.5); width: 50px; height: 50px; 
             cursor: pointer; z-index: 100; display: flex; justify-content: center; 
@@ -139,40 +132,36 @@
         .tall { grid-column: span 1; grid-row: span 2; }
         .wide { grid-column: span 2; grid-row: span 1; }
 
-        /* --- 修正 6: INTERIOR 標題上方間隔 --- */
         .interior-section { margin-top: 150px; }
 
-        /* --- 修正 5: 彈窗置中優化 --- */
+        /* Lightbox 樣式優化 */
         #lightbox { 
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); 
-            z-index: 2000; cursor: zoom-out; justify-content: center; align-items: center; 
+            background: rgba(10, 10, 10, 0); backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px); 
+            z-index: 2000; cursor: zoom-out; justify-content: center; align-items: center;
+            transition: background 0.5s ease, backdrop-filter 0.5s ease;
         }
-        #lightbox.active { display: flex; }
+        #lightbox.active { 
+            display: flex; 
+            background: rgba(10, 10, 10, 0.95); 
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); 
+        }
         #lightbox-content { 
-            width: 100%; height: 100%; display: flex; justify-content: center; align-items: center;
-            padding: 40px;
+            width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; padding: 40px;
         }
-        #lightbox img { 
+        #lightbox img, #lightbox iframe { 
             max-width: 90vw; max-height: 85vh; object-fit: contain; 
             box-shadow: 0 0 50px rgba(0,0,0,0.8); margin: auto;
-            transform: scale(0.9); opacity: 0; transition: all 0.5s cubic-bezier(0.2, 1, 0.3, 1);
+            transform: scale(0.95); opacity: 0; 
+            transition: transform 0.5s cubic-bezier(0.2, 1, 0.3, 1), opacity 0.5s ease;
         }
-        #lightbox.active img { transform: scale(1); opacity: 1; }
-        #lightbox iframe { width: 90vw; max-width: 1200px; aspect-ratio: 16 / 9; border: none; margin: auto; }
+        #lightbox.active img, #lightbox.active iframe { transform: scale(1); opacity: 1; }
 
         #back-to-top { position: fixed; bottom: 40px; right: 40px; width: 50px; height: 50px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); color: #FFF; border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; z-index: 100; opacity: 0; visibility: hidden; transition: 0.5s; }
         #back-to-top.show { opacity: 1; visibility: visible; }
 
-        @media (max-width: 1550px) {
-            .slider-arrow.prev { left: 10px; }
-            .slider-arrow.next { right: 10px; }
-        }
-        @media (max-width: 1024px) {
-            .video-item { flex: 0 0 85%; min-width: 85%; }
-            .slider-arrow, .video-carousel-container::before, .video-carousel-container::after { display: none; }
-            .photo-grid { grid-template-columns: repeat(2, 1fr); }
-        }
+        @media (max-width: 1550px) { .slider-arrow.prev { left: 10px; } .slider-arrow.next { right: 10px; } }
+        @media (max-width: 1024px) { .video-item { flex: 0 0 85%; min-width: 85%; } .slider-arrow, .video-carousel-container::before, .video-carousel-container::after { display: none; } .photo-grid { grid-template-columns: repeat(2, 1fr); } }
     </style>
 </head>
 <body>
@@ -208,42 +197,22 @@
             <p class="section-subtitle">影像、環境音與流浪的紀錄</p>
             
             <div class="video-carousel-container">
-                <button class="slider-arrow prev" onclick="moveSlider(-1)">
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
-                </button>
-                <button class="slider-arrow next" onclick="moveSlider(1)">
-                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                </button>
+                <button class="slider-arrow prev" onclick="moveSlider(-1)"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
+                <button class="slider-arrow next" onclick="moveSlider(1)"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
 
                 <div class="video-slider-wrapper" id="videoWrapper">
                     <div class="video-grid">
                         <div class="video-item" onclick="openVideo('3QTMVksP2xI')">
-                            <div class="video-cover">
-                                <img src="https://img.youtube.com/vi/3QTMVksP2xI/maxresdefault.jpg" alt="Video 1">
-                                <div class="play-icon"><svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></div>
-                            </div>
+                            <div class="video-cover"><img src="https://img.youtube.com/vi/3QTMVksP2xI/maxresdefault.jpg"><div class="play-icon"><svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></div></div>
                             <div class="video-info"><h3>Honda FIT 車中泊改造計畫</h3><p>Honda FIT Car Camping Conversion</p></div>
                         </div>
                         <div class="video-item" onclick="openVideo('ahLmj3RuP8w')">
-                            <div class="video-cover">
-                                <img src="https://img.youtube.com/vi/ahLmj3RuP8w/maxresdefault.jpg" alt="Video 2">
-                                <div class="play-icon"><svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></div>
-                            </div>
+                            <div class="video-cover"><img src="https://img.youtube.com/vi/ahLmj3RuP8w/maxresdefault.jpg"><div class="play-icon"><svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></div></div>
                             <div class="video-info"><h3>紅葉落下之時，橙色楓林裡的篝火與炊煙</h3><p>Wild Camping Diary / 4K Cinematic</p></div>
                         </div>
                         <div class="video-item" onclick="openVideo('J7vEna9qweM')">
-                            <div class="video-cover">
-                                <img src="https://img.youtube.com/vi/J7vEna9qweM/maxresdefault.jpg" alt="Video 3">
-                                <div class="play-icon"><svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></div>
-                            </div>
+                            <div class="video-cover"><img src="https://img.youtube.com/vi/J7vEna9qweM/maxresdefault.jpg"><div class="play-icon"><svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></div></div>
                             <div class="video-info"><h3>暴風前夕 迷霧中的宜蘭</h3><p>Drone footage / CINEMATIC VIDEO</p></div>
-                        </div>
-                        <div class="video-item" onclick="openVideo('eQ45DZpBrko')">
-                            <div class="video-cover">
-                                <img src="https://img.youtube.com/vi/eQ45DZpBrko/maxresdefault.jpg" alt="Video 4">
-                                <div class="play-icon"><svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></div>
-                            </div>
-                            <div class="video-info"><h3>山麓茶鄉 | 2020冬山微電影</h3><p>Award-Winning Short Film</p></div>
                         </div>
                     </div>
                 </div>
@@ -258,10 +227,6 @@
                 <div class="photo-item wide"><img src="https://live.staticflickr.com/65535/51374969201_e7803e8ae3_k.jpg"></div>
                 <div class="photo-item"><img src="https://live.staticflickr.com/65535/51596162175_9e698b7d0f_k.jpg"></div>
                 <div class="photo-item"><img src="https://live.staticflickr.com/65535/53667814818_64d2005cf5_k.jpg"></div>
-                <div class="photo-item tall"><img src="https://live.staticflickr.com/65535/52651908073_2082da090a_b.jpg"></div>
-                <div class="photo-item"><img src="https://live.staticflickr.com/65535/52213948186_a526fe57f0_k.jpg"></div>
-                <div class="photo-item large"><img src="https://live.staticflickr.com/65535/54473516983_840fddefd4_k.jpg"></div>
-                <div class="photo-item"><img src="https://live.staticflickr.com/65535/49497006952_b81e6f5ee4_k.jpg"></div>
             </div>
         </div>
 
@@ -287,7 +252,6 @@
     </button>
 
     <script>
-    // YouTube API
     var tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
     document.getElementsByTagName('script')[0].parentNode.insertBefore(tag, document.getElementsByTagName('script')[0]);
@@ -303,7 +267,6 @@
         });
     }
 
-    // --- 修正 1: 全域淡入效果 ---
     const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -324,7 +287,6 @@
         });
     }
 
-    // Lightbox 功能
     function openVideo(id) {
         const content = `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
         openLightbox(content);
@@ -339,11 +301,24 @@
         document.body.style.overflow = 'hidden';
     }
 
+    // --- 關鍵修正：修復黑畫面閃爍 ---
     function closeLightbox() {
         const lb = document.getElementById('lightbox');
+        const img = lb.querySelector('img');
+        const iframe = lb.querySelector('iframe');
+        
         lb.classList.remove('active');
+        if (img) img.style.opacity = '0';
+        if (iframe) iframe.style.opacity = '0';
+        
         document.body.style.overflow = 'auto';
-        setTimeout(() => { lb.style.display = 'none'; }, 500);
+
+        setTimeout(() => {
+            if (!lb.classList.contains('active')) {
+                lb.style.display = 'none';
+                document.getElementById('lightbox-content').innerHTML = ''; 
+            }
+        }, 500); // 對應 CSS 的 transition 時間
     }
 
     function moveSlider(direction) {
@@ -351,11 +326,8 @@
         wrapper.scrollBy({ left: direction * wrapper.clientWidth * 0.8, behavior: 'smooth' });
     }
 
-    // 初始化
     window.addEventListener('DOMContentLoaded', () => {
         initAnimations();
-
-        // 相片點擊事件
         document.querySelectorAll('.photo-item img').forEach(img => {
             img.parentElement.onclick = (e) => {
                 e.stopPropagation();
@@ -363,13 +335,11 @@
             };
         });
 
-        // 回到頂部按鈕
         const btt = document.getElementById('back-to-top');
         window.addEventListener('scroll', () => {
             if (window.scrollY > 500) btt.classList.add('show');
             else btt.classList.remove('show');
             
-            // Hero Parallax
             const hero = document.querySelector('.hero');
             const content = document.getElementById('heroContent');
             let scroll = window.scrollY;
