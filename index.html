@@ -75,17 +75,25 @@
         .section-title { font-size: 1.4rem; letter-spacing: 10px; text-align: center; color: #FFFFFF; font-weight: 300; margin-bottom: 15px; }
         .section-subtitle { font-size: 0.85rem; letter-spacing: 4px; text-align: center; color: #666; margin-bottom: 80px; }
 
-        /* 影片滑動區 */
+        /* 影片滑動區 - 修正漸層邏輯 */
         .video-carousel-container {
             max-width: 1450px; width: 90%; margin: 0 auto 120px auto;
             position: relative; overflow: visible;
         }
-        .video-carousel-container::before, .video-carousel-container::after {
-            content: ""; position: absolute; top: 0; width: 100px; height: 100%;
-            z-index: 10; pointer-events: none;
+
+        /* 新增：獨立漸層遮罩樣式 */
+        .gradient-mask {
+            position: absolute; top: 0; width: 100px; height: calc(100% - 80px); /* 避開標題文字高度 */
+            z-index: 10; pointer-events: none; transition: opacity 0.4s ease;
         }
-        .video-carousel-container::before { left: 0; background: linear-gradient(to right, #121212 0%, rgba(18,18,18,0) 100%); }
-        .video-carousel-container::after { right: 0; background: linear-gradient(to left, #121212 0%, rgba(18,18,18,0) 100%); }
+        #mask-left {
+            left: 0; background: linear-gradient(to right, #121212 0%, rgba(18,18,18,0) 100%);
+            opacity: 0; /* 初始在左側，隱藏 */
+        }
+        #mask-right {
+            right: 0; background: linear-gradient(to left, #121212 0%, rgba(18,18,18,0) 100%);
+            opacity: 1; /* 初始顯示 */
+        }
 
         .video-slider-wrapper { width: 100%; overflow: hidden; scroll-behavior: smooth; }
         .video-grid { display: flex; gap: 20px; padding: 0; margin: 0; }
@@ -134,7 +142,7 @@
 
         .interior-section { margin-top: 150px; }
 
-        /* Lightbox 樣式優化 */
+        /* Lightbox 樣式 */
         #lightbox { 
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: rgba(10, 10, 10, 0); backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px); 
@@ -161,7 +169,7 @@
         #back-to-top.show { opacity: 1; visibility: visible; }
 
         @media (max-width: 1550px) { .slider-arrow.prev { left: 10px; } .slider-arrow.next { right: 10px; } }
-        @media (max-width: 1024px) { .video-item { flex: 0 0 85%; min-width: 85%; } .slider-arrow, .video-carousel-container::before, .video-carousel-container::after { display: none; } .photo-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 1024px) { .video-item { flex: 0 0 85%; min-width: 85%; } .slider-arrow, .gradient-mask { display: none; } .photo-grid { grid-template-columns: repeat(2, 1fr); } }
     </style>
 </head>
 <body>
@@ -197,6 +205,9 @@
             <p class="section-subtitle">影像、環境音與流浪的紀錄</p>
             
             <div class="video-carousel-container">
+                <div id="mask-left" class="gradient-mask"></div>
+                <div id="mask-right" class="gradient-mask"></div>
+
                 <button class="slider-arrow prev" onclick="moveSlider(-1)"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="15 18 9 12 15 6"></polyline></svg></button>
                 <button class="slider-arrow next" onclick="moveSlider(1)"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="9 18 15 12 9 6"></polyline></svg></button>
 
@@ -305,7 +316,6 @@
         document.body.style.overflow = 'hidden';
     }
 
-    // --- 關鍵修正：修復黑畫面閃爍 ---
     function closeLightbox() {
         const lb = document.getElementById('lightbox');
         const img = lb.querySelector('img');
@@ -322,7 +332,7 @@
                 lb.style.display = 'none';
                 document.getElementById('lightbox-content').innerHTML = ''; 
             }
-        }, 500); // 對應 CSS 的 transition 時間
+        }, 500);
     }
 
     function moveSlider(direction) {
@@ -330,8 +340,30 @@
         wrapper.scrollBy({ left: direction * wrapper.clientWidth * 0.8, behavior: 'smooth' });
     }
 
+    // 新增：更新漸層遮罩狀態的功能
+    function updateGradients() {
+        const wrapper = document.getElementById('videoWrapper');
+        const maskLeft = document.getElementById('mask-left');
+        const maskRight = document.getElementById('mask-right');
+
+        if (!wrapper || !maskLeft || !maskRight) return;
+
+        // 左側漸層：當向右滑動超過 10px 時顯示
+        maskLeft.style.opacity = (wrapper.scrollLeft > 10) ? "1" : "0";
+
+        // 右側漸層：當尚未滑動到最右端時顯示 (容許 10px 誤差)
+        const isAtEnd = wrapper.scrollLeft + wrapper.clientWidth >= wrapper.scrollWidth - 10;
+        maskRight.style.opacity = isAtEnd ? "0" : "1";
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
         initAnimations();
+        
+        // 綁定影片區塊捲動事件
+        const videoWrapper = document.getElementById('videoWrapper');
+        videoWrapper.addEventListener('scroll', updateGradients);
+        updateGradients(); // 頁面載入時先初始化一次狀態
+
         document.querySelectorAll('.photo-item img').forEach(img => {
             img.parentElement.onclick = (e) => {
                 e.stopPropagation();
