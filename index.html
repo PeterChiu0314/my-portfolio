@@ -106,14 +106,14 @@
         .video-info p { font-size: 0.8rem; color: #666; letter-spacing: 1px; }
 
         .slider-arrow {
-            position: absolute; top: 28%; 
+            position: absolute; top: 50%; 
             transform: translateY(-50%); background: transparent; border: none; 
-            color: rgba(255, 255, 255, 0.5); width: 50px; height: 50px; 
+            color: rgba(255, 255, 255, 0.5); width: 40px; height: 60px; 
             cursor: pointer; z-index: 100; display: flex; justify-content: center; 
             align-items: center; transition: all 0.3s ease;
         }
-        .slider-arrow.prev { left: -60px; }
-        .slider-arrow.next { right: -60px; }
+        .slider-arrow.prev { left: 30px; }
+        .slider-arrow.next { right: 30px; }
         .slider-arrow:hover { color: #FFF; transform: translateY(-50%) scale(1.2); }
 
         /* 相片網格 */
@@ -213,6 +213,10 @@
                         <div class="video-item" onclick="openVideo('J7vEna9qweM')">
                             <div class="video-cover"><img src="https://img.youtube.com/vi/J7vEna9qweM/maxresdefault.jpg"><div class="play-icon"><svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></div></div>
                             <div class="video-info"><h3>暴風前夕 迷霧中的宜蘭</h3><p>Drone footage / CINEMATIC VIDEO</p></div>
+                        </div>
+                        <div class="video-item" onclick="openVideo('eQ45DZpBrko')">
+                            <div class="video-cover"><img src="https://img.youtube.com/vi/eQ45DZpBrko/maxresdefault.jpg"><div class="play-icon"><svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></div></div>
+                            <div class="video-info"><h3>山麓茶鄉 | 2020冬山微電影</h3><p>CINEMATIC VIDEO / 2020 Award-Winning Short Film</p></div>
                         </div>
                     </div>
                 </div>
@@ -353,3 +357,4 @@
     </script>
 </body>
 </html>
+
