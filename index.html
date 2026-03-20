@@ -52,7 +52,7 @@
         .nav-links a { color: #AAAAAA; text-decoration: none; margin-left: 30px; font-size: 0.9rem; letter-spacing: 2px; transition: color 0.3s; }
         .nav-links a:hover { color: #FFFFFF; }
 
-        /* Hero 影片區 (背景層) */
+        /* Hero 影片區 */
         .hero {
             position: fixed;
             top: 0;
@@ -108,25 +108,21 @@
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 0.8; transform: translateY(0); } }
 
-        /* --- 作品總區塊 --- */
+        /* 作品總區塊 */
         .works-section {
             position: relative;
             z-index: 10; 
             margin-top: 100vh;
-            padding: 180px 0px; /* 這裡移除左右 40px，讓影片區能寬到 1600 */
+            padding: 180px 0px;
             background-color: #121212;
             -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 150px);
             mask-image: linear-gradient(to bottom, transparent 0%, black 150px);
         }
 
-        /* 個別區塊間距 */
-        .video-section { margin-bottom: 120px; }
-        .interior-section { margin-top: 100px; }
-
         .section-title { font-size: 1.4rem; letter-spacing: 10px; text-align: center; color: #FFFFFF; font-weight: 300; margin-bottom: 15px; }
         .section-subtitle { font-size: 0.85rem; letter-spacing: 4px; text-align: center; color: #666; margin-bottom: 80px; }
 
-        /* 相片網格維持原本的 1400px 精緻感 */
+        /* 相片網格 */
         .photo-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -150,52 +146,20 @@
         .tall { grid-column: span 1; grid-row: span 2; }
         .wide { grid-column: span 2; grid-row: span 1; }
 
-        /* --- 影片滑動區塊樣式 (寬度 1600px 版) --- */
+        /* 影片滑動區塊 */
         .video-carousel-container {
-            max-width: 1600px; /* 這裡設定為你想要的寬度 */
+            max-width: 1600px;
             width: 100%;
             margin: 0 auto;
             position: relative;
-            padding: 0; 
             overflow: visible; 
+            margin-bottom: 120px;
         }
 
-        /* 左右漸層遮罩 */
-        .video-carousel-container::before,
-        .video-carousel-container::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            width: 8%; 
-            height: 100%;
-            z-index: 10;
-            pointer-events: none;
-            transition: opacity 0.5s ease;
-        }
-        .video-carousel-container::before {
-            left: 0;
-            background: linear-gradient(to right, #121212 0%, rgba(18,18,18,0) 100%);
-        }
-        .video-carousel-container::after {
-            right: 0;
-            background: linear-gradient(to left, #121212 0%, rgba(18,18,18,0) 100%);
-        }
-
-        .video-slider-wrapper {
-            width: 100%;
-            overflow: hidden;
-            scroll-behavior: smooth;
-        }
-
-        .video-grid {
-            display: flex;
-            gap: 15px;
-            padding: 0; 
-            margin: 0;
-        }
+        .video-slider-wrapper { width: 100%; overflow: hidden; scroll-behavior: smooth; }
+        .video-grid { display: flex; gap: 15px; padding: 0; margin: 0; }
 
         .video-item { 
-            /* 配合 15px gap，計算 3.2 張的精確比例 */
             flex: 0 0 calc((100% - 45px) / 3.2); 
             min-width: calc((100% - 45px) / 3.2);
             cursor: pointer; 
@@ -210,58 +174,42 @@
         .video-item:hover .video-cover img { transform: scale(1.05); opacity: 0.9; }
         .video-item:hover .play-icon { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
         
-        .video-info { 
-            margin-top: 10px;
-            text-align: left;
-            padding-left: 15px; 
-            background-color: transparent;
-        }
+        .video-info { margin-top: 10px; text-align: left; padding-left: 15px; }
         .video-info h3 { font-size: 1.1rem; font-weight: 500; letter-spacing: 3px; color: #FFF; margin-bottom: 2px;}
         .video-info p { font-size: 0.85rem; color: #AAAAAA; letter-spacing: 1px; font-weight: 300;}
 
-        /* 箭頭樣式 */
+        /* 箭頭 */
         .slider-arrow {
-            position: absolute;
-            top: 50%; 
-            transform: translateY(-50%);
-            background: transparent;
-            border: none;
-            color: rgba(255, 255, 255, 0.7);
-            width: 40px;
-            height: 60px; 
-            cursor: pointer;
-            z-index: 100; 
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: all 0.3s ease;
-            filter: drop-shadow(0 0 5px rgba(0,0,0,0.5));
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: transparent; border: none; color: rgba(255, 255, 255, 0.7);
+            width: 40px; height: 60px; cursor: pointer; z-index: 100; 
+            display: flex; justify-content: center; align-items: center; transition: all 0.3s ease;
         }
         .slider-arrow.prev { left: 20px; }
         .slider-arrow.next { right: 20px; }
         .slider-arrow:hover { color: rgba(255, 255, 255, 1); transform: translateY(-50%) scale(1.2); }
-        .slider-arrow:disabled { opacity: 0; pointer-events: none; }
-        .slider-arrow svg { width: 50px; height: 60px; stroke-width: 1.5px; }
 
-        /* 響應式優化 */
-        @media (max-width: 1650px) {
-            .video-carousel-container { width: 95%; }
+        /* 彈窗 */
+        #lightbox { 
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(10, 10, 10, 0); backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px); 
+            z-index: 2000; cursor: zoom-out; justify-content: center; align-items: center; 
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
         }
-        @media (max-width: 1024px) {
-            .video-grid { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scroll-snap-type: x mandatory;}
-            .video-item { flex: 0 0 85%; min-width: 85%; scroll-snap-align: start;}
-            .video-carousel-container::before, .video-carousel-container::after { display: none; }
-            .slider-arrow { display: none; }
-        }
-
-        /* 彈窗與回到頂部 (維持原樣) */
-        #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 10, 0); backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px); z-index: 1000; cursor: zoom-out; justify-content: center; align-items: center; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
         #lightbox.active { display: flex; background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
         #lightbox-content { width: 90%; max-width: 1200px; transform: scale(0.7) translateY(30px); opacity: 0; transition: transform 0.7s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.5s ease; }
         #lightbox.active #lightbox-content { transform: scale(1) translateY(0); opacity: 1; }
         #lightbox iframe { width: 100%; aspect-ratio: 16 / 9; max-height: 80vh; border: none; }
-        #back-to-top { position: fixed; bottom: 40px; right: 40px; width: 50px; height: 50px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; z-index: 100; opacity: 0; visibility: hidden; transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1); }
+        #lightbox img { max-width: 100%; max-height: 85vh; object-fit: contain; box-shadow: 0 0 30px rgba(0,0,0,0.5); }
+
+        #back-to-top { position: fixed; bottom: 40px; right: 40px; width: 50px; height: 50px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; z-index: 100; opacity: 0; visibility: hidden; transition: all 0.5s; }
         #back-to-top.show { opacity: 1; visibility: visible; }
+
+        @media (max-width: 1024px) {
+            .video-item { flex: 0 0 85%; min-width: 85%; }
+            .slider-arrow { display: none; }
+            .photo-grid { grid-template-columns: repeat(2, 1fr); }
+        }
     </style>
 </head>
 <body>
@@ -299,16 +247,16 @@
             <p class="section-subtitle">影像、環境音與流浪的紀錄</p>
             
             <div class="video-carousel-container">
-                <button class="slider-arrow prev" id="slidePrev" onclick="moveSlider(-1)">
+                <button class="slider-arrow prev" onclick="moveSlider(-1)">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
                 </button>
-                <button class="slider-arrow next" id="slideNext" onclick="moveSlider(1)">
+                <button class="slider-arrow next" onclick="moveSlider(1)">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
                 </button>
 
                 <div class="video-slider-wrapper" id="videoWrapper">
-                    <div class="video-grid" id="videoGrid">
-                        <div class="video-item photo-item" onclick="openVideo('3QTMVksP2xI')">
+                    <div class="video-grid">
+                        <div class="video-item" onclick="openVideo('3QTMVksP2xI')">
                             <div class="video-cover">
                                 <img src="https://img.youtube.com/vi/3QTMVksP2xI/maxresdefault.jpg" alt="Cinema 1">
                                 <div class="play-icon"><svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></div>
@@ -318,7 +266,7 @@
                                 <p>Honda FIT Car Camping Conversion</p>
                             </div>
                         </div>
-                        <div class="video-item photo-item" onclick="openVideo('ahLmj3RuP8w')">
+                        <div class="video-item" onclick="openVideo('ahLmj3RuP8w')">
                             <div class="video-cover">
                                 <img src="https://img.youtube.com/vi/ahLmj3RuP8w/maxresdefault.jpg" alt="Cinema 2">
                                 <div class="play-icon"><svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></div>
@@ -328,7 +276,7 @@
                                 <p>Wild Camping Diary / 4K Cinematic</p>
                             </div>
                         </div>
-                        <div class="video-item photo-item" onclick="openVideo('J7vEna9qweM')">
+                        <div class="video-item" onclick="openVideo('J7vEna9qweM')">
                             <div class="video-cover">
                                 <img src="https://img.youtube.com/vi/J7vEna9qweM/maxresdefault.jpg" alt="Cinema 3">
                                 <div class="play-icon"><svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></div>
@@ -338,7 +286,7 @@
                                 <p>Drone footage / CINEMATIC VIDEO</p>
                             </div>
                         </div>
-                        <div class="video-item photo-item" onclick="openVideo('eQ45DZpBrko')">
+                        <div class="video-item" onclick="openVideo('eQ45DZpBrko')">
                             <div class="video-cover">
                                 <img src="https://img.youtube.com/vi/eQ45DZpBrko/maxresdefault.jpg" alt="Cinema 4">
                                 <div class="play-icon"><svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></div>
@@ -357,30 +305,14 @@
             <h2 class="section-title">NATURE & TRAVEL</h2>
             <p class="section-subtitle">野徑、微光與流浪的痕跡</p>
             <div class="photo-grid">
-                <div class="photo-item large">
-                    <img src="https://live.staticflickr.com/65535/54491742976_0c442c6b6b_k.jpg" alt="Nature 1">
-                </div>
-                <div class="photo-item wide">
-                    <img src="https://live.staticflickr.com/65535/51374969201_e7803e8ae3_k.jpg" alt="Nature 2">
-                </div>
-                <div class="photo-item">
-                    <img src="https://live.staticflickr.com/65535/51596162175_9e698b7d0f_k.jpg" alt="Nature 3">
-                </div>
-                <div class="photo-item">
-                    <img src="https://live.staticflickr.com/65535/53667814818_64d2005cf5_k.jpg" alt="Nature 4">
-                </div>
-                <div class="photo-item tall">
-                    <img src="https://live.staticflickr.com/65535/52651908073_2082da090a_b.jpg" alt="Nature 5">
-                </div>
-                <div class="photo-item">
-                    <img src="https://live.staticflickr.com/65535/52213948186_a526fe57f0_k.jpg" alt="Nature 6">
-                </div>
-                <div class="photo-item large">
-                    <img src="https://live.staticflickr.com/65535/54473516983_840fddefd4_k.jpg" alt="Nature 7">
-                </div>
-                <div class="photo-item">
-                    <img src="https://live.staticflickr.com/65535/49497006952_b81e6f5ee4_k.jpg" alt="Nature 8">
-                </div>
+                <div class="photo-item large"><img src="https://live.staticflickr.com/65535/54491742976_0c442c6b6b_k.jpg" alt="Nature 1"></div>
+                <div class="photo-item wide"><img src="https://live.staticflickr.com/65535/51374969201_e7803e8ae3_k.jpg" alt="Nature 2"></div>
+                <div class="photo-item"><img src="https://live.staticflickr.com/65535/51596162175_9e698b7d0f_k.jpg" alt="Nature 3"></div>
+                <div class="photo-item"><img src="https://live.staticflickr.com/65535/53667814818_64d2005cf5_k.jpg" alt="Nature 4"></div>
+                <div class="photo-item tall"><img src="https://live.staticflickr.com/65535/52651908073_2082da090a_b.jpg" alt="Nature 5"></div>
+                <div class="photo-item"><img src="https://live.staticflickr.com/65535/52213948186_a526fe57f0_k.jpg" alt="Nature 6"></div>
+                <div class="photo-item large"><img src="https://live.staticflickr.com/65535/54473516983_840fddefd4_k.jpg" alt="Nature 7"></div>
+                <div class="photo-item"><img src="https://live.staticflickr.com/65535/49497006952_b81e6f5ee4_k.jpg" alt="Nature 8"></div>
             </div>
         </div>
 
@@ -388,18 +320,10 @@
             <h2 class="section-title">INTERIOR DESIGN</h2>
             <p class="section-subtitle">線條、空間與光影的對話</p>
             <div class="photo-grid">
-                <div class="photo-item large">
-                    <img src="https://live.staticflickr.com/65535/55147244082_b285974d24_b.jpg" alt="Interior 1">
-                </div>
-                <div class="photo-item wide">
-                    <img src="https://live.staticflickr.com/65535/53745824775_e618889b48_k.jpg" alt="Interior 2">
-                </div>
-                <div class="photo-item">
-                    <img src="https://live.staticflickr.com/65535/53744486207_d54dadb4c4_k.jpg" alt="Interior 3">
-                </div>
-                <div class="photo-item">
-                    <img src="https://live.staticflickr.com/65535/53745595828_559d5a6bed_k.jpg" alt="Interior 4">
-                </div>
+                <div class="photo-item large"><img src="https://live.staticflickr.com/65535/55147244082_b285974d24_b.jpg" alt="Interior 1"></div>
+                <div class="photo-item wide"><img src="https://live.staticflickr.com/65535/53745824775_e618889b48_k.jpg" alt="Interior 2"></div>
+                <div class="photo-item"><img src="https://live.staticflickr.com/65535/53744486207_d54dadb4c4_k.jpg" alt="Interior 3"></div>
+                <div class="photo-item"><img src="https://live.staticflickr.com/65535/53745595828_559d5a6bed_k.jpg" alt="Interior 4"></div>
             </div>
         </div>
 
@@ -414,7 +338,7 @@
     </button>
 
     <script>
-    // YouTube API & Video Logic
+    // 1. YouTube API
     var tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
     var firstScriptTag = document.getElementsByTagName('script')[0];
@@ -445,8 +369,8 @@
         }, { threshold: 0 });
         heroObserver.observe(document.querySelector('.hero'));
     }
-    
-    // Parallax & Scroll Effects
+
+    // 2. Scroll Effects (Parallax)
     window.addEventListener('scroll', function() {
         const hero = document.querySelector('.hero');
         const heroContent = document.getElementById('heroContent');
@@ -460,9 +384,9 @@
             heroContent.style.transform = `translateY(-${scrollTop * 0.1}px)`;
         }
     });
-    
-    // Intersection Observer for items
-    const observer = new IntersectionObserver((entries) => {
+
+    // 3. Reveal Animation
+    const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.style.opacity = "1";
@@ -471,49 +395,25 @@
             }
         });
     }, { threshold: 0.1 });
-    
-    document.querySelectorAll('.photo-item').forEach(item => {
-        item.style.opacity = "0";
-        item.style.transform = "translateY(50px)";
-        item.style.filter = "blur(5px)";
-        item.style.transition = "all 1s cubic-bezier(0.2, 1, 0.3, 1)";
-        observer.observe(item);
-    });
 
-// 5. 彈窗邏輯 (修正版：確保相片與影片都能點擊)
+    // 4. Lightbox & Controls
     const lightbox = document.getElementById('lightbox');
     const lightboxContent = document.getElementById('lightbox-content');
-    
-    // 初始化所有相片的點擊事件
-    function initPhotoLightbox() {
-        document.querySelectorAll('.photo-grid .photo-item img').forEach(img => {
-            // 移除舊的監聽器防止重複綁定
-            img.onclick = null; 
-            img.addEventListener('click', (e) => {
-                e.stopPropagation();
-                openLightbox(`<img src="${img.src}" style="max-width:100%; max-height:80vh; object-fit:contain;">`);
-            });
-        });
-    }
 
-    // 影片打開函數 (維持不變)
     function openVideo(id) {
         const iframeHtml = `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
         openLightbox(iframeHtml);
     }
 
-    // 通用的 Lightbox 打開函數
     function openLightbox(content) {
         lightbox.style.display = 'flex';
-        // 強制瀏覽器重繪，確保動畫順暢
         void lightbox.offsetWidth; 
         lightboxContent.innerHTML = content;
         lightbox.classList.add('active');
-        document.body.style.overflow = 'hidden'; // 禁止背景捲動
+        document.body.style.overflow = 'hidden';
     }
-    
-    // 點擊空白處關閉
-    lightbox.addEventListener('click', () => {
+
+    function closeLightbox() {
         lightbox.classList.remove('active');
         document.body.style.overflow = 'auto';
         setTimeout(() => {
@@ -521,26 +421,49 @@
                 lightbox.style.display = 'none';
                 lightboxContent.innerHTML = ''; 
             }
-        }, 500); 
-    });
+        }, 500);
+    }
 
-    // 頁面載入完成後執行初始化
-    window.addEventListener('DOMContentLoaded', initPhotoLightbox);
+    lightbox.addEventListener('click', closeLightbox);
 
-    const videoWrapper = document.getElementById('videoWrapper');
     function moveSlider(direction) {
-        const scrollAmount = videoWrapper.clientWidth; 
+        const videoWrapper = document.getElementById('videoWrapper');
+        const scrollAmount = videoWrapper.clientWidth * 0.8;
         videoWrapper.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
     }
 
-    // Back to top
-    const backToTopBtn = document.getElementById('back-to-top');
-    window.addEventListener('scroll', () => {
-        if (window.pageYOffset > window.innerHeight / 2) { backToTopBtn.classList.add('show'); } 
-        else { backToTopBtn.classList.remove('show'); }
+    // 5. Initialize on Load
+    window.addEventListener('DOMContentLoaded', () => {
+        // Init Photo Click
+        const photoSections = document.querySelectorAll('.nature-section, .interior-section');
+        photoSections.forEach(section => {
+            section.querySelectorAll('.photo-item').forEach(item => {
+                // Reveal effect
+                item.style.opacity = "0";
+                item.style.transform = "translateY(50px)";
+                item.style.filter = "blur(5px)";
+                item.style.transition = "all 1s cubic-bezier(0.2, 1, 0.3, 1)";
+                revealObserver.observe(item);
+
+                // Click to zoom
+                const img = item.querySelector('img');
+                if(img) {
+                    item.onclick = (e) => {
+                        e.stopPropagation();
+                        openLightbox(`<img src="${img.src}">`);
+                    };
+                }
+            });
+        });
+
+        // Back to top
+        const backToTopBtn = document.getElementById('back-to-top');
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > window.innerHeight / 2) { backToTopBtn.classList.add('show'); } 
+            else { backToTopBtn.classList.remove('show'); }
+        });
+        backToTopBtn.onclick = () => window.scrollTo({ top: 0, behavior: 'smooth' });
     });
-    backToTopBtn.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
     </script>
 </body>
 </html>
-
