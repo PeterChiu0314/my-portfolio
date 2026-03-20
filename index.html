@@ -480,28 +480,52 @@
         observer.observe(item);
     });
 
-    // Lightbox & Video Slider Logic
+// 5. 彈窗邏輯 (修正版：確保相片與影片都能點擊)
     const lightbox = document.getElementById('lightbox');
     const lightboxContent = document.getElementById('lightbox-content');
     
+    // 初始化所有相片的點擊事件
+    function initPhotoLightbox() {
+        document.querySelectorAll('.photo-grid .photo-item img').forEach(img => {
+            // 移除舊的監聽器防止重複綁定
+            img.onclick = null; 
+            img.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openLightbox(`<img src="${img.src}" style="max-width:100%; max-height:80vh; object-fit:contain;">`);
+            });
+        });
+    }
+
+    // 影片打開函數 (維持不變)
     function openVideo(id) {
         const iframeHtml = `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
         openLightbox(iframeHtml);
     }
 
+    // 通用的 Lightbox 打開函數
     function openLightbox(content) {
         lightbox.style.display = 'flex';
+        // 強制瀏覽器重繪，確保動畫順暢
         void lightbox.offsetWidth; 
         lightboxContent.innerHTML = content;
         lightbox.classList.add('active');
-        document.body.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden'; // 禁止背景捲動
     }
     
+    // 點擊空白處關閉
     lightbox.addEventListener('click', () => {
         lightbox.classList.remove('active');
         document.body.style.overflow = 'auto';
-        setTimeout(() => { lightbox.style.display = 'none'; }, 500); 
+        setTimeout(() => {
+            if (!lightbox.classList.contains('active')) {
+                lightbox.style.display = 'none';
+                lightboxContent.innerHTML = ''; 
+            }
+        }, 500); 
     });
+
+    // 頁面載入完成後執行初始化
+    window.addEventListener('DOMContentLoaded', initPhotoLightbox);
 
     const videoWrapper = document.getElementById('videoWrapper');
     function moveSlider(direction) {
@@ -519,3 +543,4 @@
     </script>
 </body>
 </html>
+
