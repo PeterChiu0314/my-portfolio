@@ -52,17 +52,37 @@
             background: linear-gradient(to bottom, rgba(18,18,18,1) 0%, rgba(18,18,18,0) 25%, rgba(18,18,18,0) 75%, rgba(18,18,18,1) 100%);
             z-index: 2;
         }
-        .hero-content {
-            z-index: 5; position: relative;
-            animation: heroEntrance 2.5s cubic-bezier(0.2, 1, 0.3, 1) 2s both;
+
+        /* --- 標題動畫修正區 --- */
+        .hero-content { z-index: 5; position: relative; }
+
+        /* 定義統一的升起動畫 */
+        @keyframes fadeUp {
+            0% { opacity: 0; transform: translateY(40px); filter: blur(5px); }
+            100% { opacity: 1; transform: translateY(0); filter: blur(0px); }
         }
-        @keyframes heroEntrance {
-            0% { opacity: 0; transform: translateY(30px); }
-            100% { opacity: 1; transform: translateY(0); }
+
+        .hero-title { 
+            font-size: 3.2rem; font-weight: 500; letter-spacing: 18px; margin-bottom: 25px; color: #FFFFFF; 
+            text-shadow: 0 0 20px rgba(0,0,0,0.5);
+            opacity: 0; /* 初始隱藏 */
+            animation: fadeUp 2s cubic-bezier(0.2, 1, 0.3, 1) forwards;
+            animation-delay: 0.8s; /* 影片跑一下後大標再出 */
         }
-        .hero-title { font-size: 3.2rem; font-weight: 500; letter-spacing: 18px; margin-bottom: 25px; color: #FFFFFF; text-shadow: 0 0 20px rgba(0,0,0,0.5); }
-        .hero-subtitle-en { font-size: 0.9rem; letter-spacing: 5px; color: #888; text-transform: uppercase; }
-        .hero-subtitle-zh { font-size: 1rem; letter-spacing: 4px; color: #AAA; font-weight: 300; margin-top: 10px; }
+
+        .hero-subtitle-en { 
+            font-size: 0.9rem; letter-spacing: 5px; color: #888; text-transform: uppercase; 
+            opacity: 0;
+            animation: fadeUp 1.5s cubic-bezier(0.2, 1, 0.3, 1) forwards;
+            animation-delay: 1.6s; /* 大標動一半時副標出 */
+        }
+
+        .hero-subtitle-zh { 
+            font-size: 1rem; letter-spacing: 4px; color: #AAA; font-weight: 300; margin-top: 10px; 
+            opacity: 0;
+            animation: fadeUp 1.5s cubic-bezier(0.2, 1, 0.3, 1) forwards;
+            animation-delay: 1.6s; /* 與英文副標同步 */
+        }
 
         /* 作品總區塊 */
         .works-section {
@@ -75,24 +95,23 @@
         .section-title { font-size: 1.4rem; letter-spacing: 10px; text-align: center; color: #FFFFFF; font-weight: 300; margin-bottom: 15px; }
         .section-subtitle { font-size: 0.85rem; letter-spacing: 4px; text-align: center; color: #666; margin-bottom: 80px; }
 
-        /* 影片滑動區 - 修正漸層邏輯 */
+        /* 影片滑動區漸層修正 */
         .video-carousel-container {
             max-width: 1450px; width: 90%; margin: 0 auto 120px auto;
             position: relative; overflow: visible;
         }
 
-        /* 新增：獨立漸層遮罩樣式 */
         .gradient-mask {
-            position: absolute; top: 0; width: 100px; height: calc(100% - 80px); /* 避開標題文字高度 */
+            position: absolute; top: 0; width: 100px; height: calc(100% - 80px);
             z-index: 10; pointer-events: none; transition: opacity 0.4s ease;
         }
         #mask-left {
             left: 0; background: linear-gradient(to right, #121212 0%, rgba(18,18,18,0) 100%);
-            opacity: 0; /* 初始在左側，隱藏 */
+            opacity: 0; 
         }
         #mask-right {
             right: 0; background: linear-gradient(to left, #121212 0%, rgba(18,18,18,0) 100%);
-            opacity: 1; /* 初始顯示 */
+            opacity: 1;
         }
 
         .video-slider-wrapper { width: 100%; overflow: hidden; scroll-behavior: smooth; }
@@ -150,13 +169,10 @@
             transition: background 0.5s ease, backdrop-filter 0.5s ease;
         }
         #lightbox.active { 
-            display: flex; 
-            background: rgba(10, 10, 10, 0.95); 
+            display: flex; background: rgba(10, 10, 10, 0.95); 
             backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); 
         }
-        #lightbox-content { 
-            width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; padding: 40px;
-        }
+        #lightbox-content { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; padding: 40px; }
         #lightbox img, #lightbox iframe { 
             max-width: 90vw; max-height: 85vh; object-fit: contain; 
             box-shadow: 0 0 50px rgba(0,0,0,0.8); margin: auto;
@@ -255,7 +271,6 @@
                 <div class="photo-item"><img src="https://live.staticflickr.com/65535/53745595828_559d5a6bed_k.jpg"></div>
             </div>
         </div>
-
     </section>
 
     <div id="lightbox" onclick="closeLightbox()">
@@ -320,13 +335,10 @@
         const lb = document.getElementById('lightbox');
         const img = lb.querySelector('img');
         const iframe = lb.querySelector('iframe');
-        
         lb.classList.remove('active');
         if (img) img.style.opacity = '0';
         if (iframe) iframe.style.opacity = '0';
-        
         document.body.style.overflow = 'auto';
-
         setTimeout(() => {
             if (!lb.classList.contains('active')) {
                 lb.style.display = 'none';
@@ -340,29 +352,23 @@
         wrapper.scrollBy({ left: direction * wrapper.clientWidth * 0.8, behavior: 'smooth' });
     }
 
-    // 新增：更新漸層遮罩狀態的功能
     function updateGradients() {
         const wrapper = document.getElementById('videoWrapper');
         const maskLeft = document.getElementById('mask-left');
         const maskRight = document.getElementById('mask-right');
-
         if (!wrapper || !maskLeft || !maskRight) return;
-
-        // 左側漸層：當向右滑動超過 10px 時顯示
         maskLeft.style.opacity = (wrapper.scrollLeft > 10) ? "1" : "0";
-
-        // 右側漸層：當尚未滑動到最右端時顯示 (容許 10px 誤差)
         const isAtEnd = wrapper.scrollLeft + wrapper.clientWidth >= wrapper.scrollWidth - 10;
         maskRight.style.opacity = isAtEnd ? "0" : "1";
     }
 
     window.addEventListener('DOMContentLoaded', () => {
         initAnimations();
-        
-        // 綁定影片區塊捲動事件
         const videoWrapper = document.getElementById('videoWrapper');
-        videoWrapper.addEventListener('scroll', updateGradients);
-        updateGradients(); // 頁面載入時先初始化一次狀態
+        if(videoWrapper) {
+            videoWrapper.addEventListener('scroll', updateGradients);
+            updateGradients();
+        }
 
         document.querySelectorAll('.photo-item img').forEach(img => {
             img.parentElement.onclick = (e) => {
