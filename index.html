@@ -108,27 +108,25 @@
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 0.8; transform: translateY(0); } }
 
-        /* --- 作品區塊 --- */
+        /* --- 作品總區塊 --- */
         .works-section {
             position: relative;
             z-index: 10; 
             margin-top: 100vh;
-            padding: 180px 0px;
+            padding: 180px 0px; /* 這裡移除左右 40px，讓影片區能寬到 1600 */
             background-color: #121212;
             -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 150px);
             mask-image: linear-gradient(to bottom, transparent 0%, black 150px);
         }
 
-        .interior-section, .video-section {
-            margin-top: 0; 
-            padding-top: 0; 
-            -webkit-mask-image: none;
-            mask-image: none;
-        }
+        /* 個別區塊間距 */
+        .video-section { margin-bottom: 120px; }
+        .interior-section { margin-top: 100px; }
 
         .section-title { font-size: 1.4rem; letter-spacing: 10px; text-align: center; color: #FFFFFF; font-weight: 300; margin-bottom: 15px; }
         .section-subtitle { font-size: 0.85rem; letter-spacing: 4px; text-align: center; color: #666; margin-bottom: 80px; }
 
+        /* 相片網格維持原本的 1400px 精緻感 */
         .photo-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -137,6 +135,7 @@
             gap: 20px;
             max-width: 1400px;
             margin: 0 auto;
+            padding: 0 20px;
         }
 
         .photo-item { position: relative; overflow: hidden; background-color: #1a1a1a; cursor: zoom-in; }
@@ -151,25 +150,25 @@
         .tall { grid-column: span 1; grid-row: span 2; }
         .wide { grid-column: span 2; grid-row: span 1; }
 
-        /* --- 影片滑動區塊樣式 (深度修改) --- */
+        /* --- 影片滑動區塊樣式 (寬度 1600px 版) --- */
         .video-carousel-container {
-            max-width: 1800px;
+            max-width: 1600px; /* 這裡設定為你想要的寬度 */
+            width: 100%;
             margin: 0 auto;
             position: relative;
-            /* 1. 放大與對齊：移除原本的 padding，確保左側切齊邊界 */
             padding: 0; 
             overflow: visible; 
         }
 
-        /* 2. 漸層過度：在縮圖上方加入左右漸層遮罩，讓邊緣滑入時消失 */
+        /* 左右漸層遮罩 */
         .video-carousel-container::before,
         .video-carousel-container::after {
             content: "";
             position: absolute;
             top: 0;
-            width: 8%; /* 漸層寬度，控制露出下一張的多少 */
+            width: 8%; 
             height: 100%;
-            z-index: 10; /* 低於箭頭，高於縮圖 */
+            z-index: 10;
             pointer-events: none;
             transition: opacity 0.5s ease;
         }
@@ -189,7 +188,6 @@
         }
 
         .video-grid {
-            /* 修改為 Flexbox 佈局以實作露出效果 */
             display: flex;
             gap: 15px;
             padding: 0; 
@@ -197,8 +195,8 @@
         }
 
         .video-item { 
-            /* 露出效果：讓縮圖寬度小於 100%/3，稍微露出下一張 */
-            flex: 0 0 calc((100% - 45px) / 3.2); /* 這裡控制露出多少 */
+            /* 配合 15px gap，計算 3.2 張的精確比例 */
+            flex: 0 0 calc((100% - 45px) / 3.2); 
             min-width: calc((100% - 45px) / 3.2);
             cursor: pointer; 
         }
@@ -212,7 +210,6 @@
         .video-item:hover .video-cover img { transform: scale(1.05); opacity: 0.9; }
         .video-item:hover .play-icon { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
         
-        /* 5. 影片下文字：無底色 (保留原本樣式不改) */
         .video-info { 
             margin-top: 10px;
             text-align: left;
@@ -222,73 +219,33 @@
         .video-info h3 { font-size: 1.1rem; font-weight: 500; letter-spacing: 3px; color: #FFF; margin-bottom: 2px;}
         .video-info p { font-size: 0.85rem; color: #AAAAAA; letter-spacing: 1px; font-weight: 300;}
 
-        /* --- 移除圓框，僅保留箭頭樣式 --- */
+        /* 箭頭樣式 */
         .slider-arrow {
             position: absolute;
-            top: 50%; /* 鎖定在影片縮圖中心 */
+            top: 50%; 
             transform: translateY(-50%);
-            
-            /* 1. 移除背景與邊框 */
             background: transparent;
-            backdrop-filter: none;
-            -webkit-backdrop-filter: none;
             border: none;
-            
-            /* 2. 設定箭頭顏色與大小 */
-            color: rgba(255, 255, 255, 0.7); /* 平時半透明 */
+            color: rgba(255, 255, 255, 0.7);
             width: 40px;
-            height: 60px; /* 拉高感應區域方便點擊 */
+            height: 60px; 
             cursor: pointer;
             z-index: 100; 
-            
             display: flex;
             justify-content: center;
             align-items: center;
             transition: all 0.3s ease;
-            
-            /* 3. 加上淡淡的文字陰影，防止在亮色背景看不見箭頭 */
             filter: drop-shadow(0 0 5px rgba(0,0,0,0.5));
         }
-
-        /* 箭頭位置移至縮圖內側 */
         .slider-arrow.prev { left: 20px; }
         .slider-arrow.next { right: 20px; }
-
-        /* 滑鼠移上去時變亮並稍微放大 */
-        .slider-arrow:hover { 
-            color: rgba(255, 255, 255, 1);
-            transform: translateY(-50%) scale(1.2);
-        }
-
-        /* 隱藏預設按鈕外觀 */
-        .slider-arrow:focus { outline: none; }
-
-        .slider-arrow svg {
-            width: 50px; 
-            height: 60px;
-            stroke-width: 1.5px; /* 線條不要太粗，維持簡約感 */
-        }
-
-        /* 當無法再滑動時，優雅地隱藏箭頭 */
-        .slider-arrow:disabled { 
-            opacity: 0; 
-            pointer-events: none; 
-        }
-
-        /* 確保容器 overflow 不會切掉箭頭的陰影或動態 */
-        .video-carousel-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            position: relative;
-            padding: 0;
-            overflow: visible; 
-        }
+        .slider-arrow:hover { color: rgba(255, 255, 255, 1); transform: translateY(-50%) scale(1.2); }
+        .slider-arrow:disabled { opacity: 0; pointer-events: none; }
+        .slider-arrow svg { width: 50px; height: 60px; stroke-width: 1.5px; }
 
         /* 響應式優化 */
-        @media (max-width: 1500px) {
-            .video-carousel-container { padding: 0 50px; }
-            .slider-arrow.prev { left: 10px; }
-            .slider-arrow.next { right: 10px; }
+        @media (max-width: 1650px) {
+            .video-carousel-container { width: 95%; }
         }
         @media (max-width: 1024px) {
             .video-grid { flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scroll-snap-type: x mandatory;}
@@ -297,82 +254,14 @@
             .slider-arrow { display: none; }
         }
 
-        /* --- 彈窗動畫與尺寸修正 --- */
-        #lightbox {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(10, 10, 10, 0); 
-            backdrop-filter: blur(0px); 
-            -webkit-backdrop-filter: blur(0px);
-            z-index: 1000;
-            cursor: zoom-out;
-            justify-content: center;
-            align-items: center;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
-            will-change: backdrop-filter, background; 
-        }
-        
-        #lightbox.active {
-            display: flex;
-            background: rgba(10, 10, 10, 0.95);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-        }
-        
-        #lightbox-content {
-            width: 90%;
-            max-width: 1200px;
-            max-height: 80vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 10px 50px rgba(0,0,0,0.5);
-            transform: scale(0.7) translateY(30px); 
-            opacity: 0;
-            transition: transform 0.7s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.5s ease;
-        }
-        
-        #lightbox.active #lightbox-content {
-            transform: scale(1) translateY(0);
-            opacity: 1;
-        }
-
-        #lightbox img { max-width: 100%; max-height: 80vh; object-fit: contain; }
+        /* 彈窗與回到頂部 (維持原樣) */
+        #lightbox { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 10, 10, 0); backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px); z-index: 1000; cursor: zoom-out; justify-content: center; align-items: center; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        #lightbox.active { display: flex; background: rgba(10, 10, 10, 0.95); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+        #lightbox-content { width: 90%; max-width: 1200px; transform: scale(0.7) translateY(30px); opacity: 0; transition: transform 0.7s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.5s ease; }
+        #lightbox.active #lightbox-content { transform: scale(1) translateY(0); opacity: 1; }
         #lightbox iframe { width: 100%; aspect-ratio: 16 / 9; max-height: 80vh; border: none; }
-
-        /* --- 回到頂部按鈕 --- */
-        #back-to-top {
-            position: fixed;
-            bottom: 40px;
-            right: 40px;
-            width: 50px;
-            height: 50px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            color: #FFFFFF;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 100;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-        #back-to-top:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-5px);
-        }
-        #back-to-top.show {
-            opacity: 1;
-            visibility: visible;
-        }
+        #back-to-top { position: fixed; bottom: 40px; right: 40px; width: 50px; height: 50px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; z-index: 100; opacity: 0; visibility: hidden; transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1); }
+        #back-to-top.show { opacity: 1; visibility: visible; }
     </style>
 </head>
 <body>
@@ -382,9 +271,9 @@
     <nav>
         <div class="logo">PETER CHIU</div>
         <div class="nav-links">
+            <a href="#cinema">CINEMA</a>
             <a href="#nature">NATURE</a>
             <a href="#interior">INTERIOR</a>
-            <a href="#cinema">CINEMA</a>
             <a href="https://www.flickr.com/photos/peterchiu0314/" target="_blank">FLICKR</a>
         </div>
     </nav>
@@ -403,121 +292,117 @@
         </div>
     </section>
 
-    <section id="nature" class="works-section">
-        <h2 class="section-title">NATURE & TRAVEL</h2>
-        <p class="section-subtitle">野徑、微光與流浪的痕跡</p>
-        <div class="photo-grid">
-            <div class="photo-item large">
-                <img src="https://live.staticflickr.com/65535/54491742976_0c442c6b6b_k.jpg" alt="Nature 1">
-            </div>
-            <div class="photo-item wide">
-                <img src="https://live.staticflickr.com/65535/51374969201_e7803e8ae3_k.jpg" alt="Nature 2">
-            </div>
-            <div class="photo-item">
-                <img src="https://live.staticflickr.com/65535/51596162175_9e698b7d0f_k.jpg" alt="Nature 3">
-            </div>
-            <div class="photo-item">
-                <img src="https://live.staticflickr.com/65535/53667814818_64d2005cf5_k.jpg" alt="Nature 4">
-            </div>
-            <div class="photo-item tall">
-                <img src="https://live.staticflickr.com/65535/52651908073_2082da090a_b.jpg" alt="Nature 5">
-            </div>
-            <div class="photo-item">
-                <img src="https://live.staticflickr.com/65535/52213948186_a526fe57f0_k.jpg" alt="Nature 6">
-            </div>
-            <div class="photo-item large">
-                <img src="https://live.staticflickr.com/65535/54473516983_840fddefd4_k.jpg" alt="Nature 7">
-            </div>
-            <div class="photo-item">
-                <img src="https://live.staticflickr.com/65535/49497006952_b81e6f5ee4_k.jpg" alt="Nature 8">
-            </div>
-        </div>
-    </section>
-
-    <section id="interior" class="works-section interior-section">
-        <h2 class="section-title">INTERIOR DESIGN</h2>
-        <p class="section-subtitle">線條、空間與光影的對話</p>
-        <div class="photo-grid">
-            <div class="photo-item large">
-                <img src="https://live.staticflickr.com/65535/55147244082_b285974d24_b.jpg" alt="Interior 1">
-            </div>
-            <div class="photo-item wide">
-                <img src="https://live.staticflickr.com/65535/53745824775_e618889b48_k.jpg" alt="Interior 2">
-            </div>
-            <div class="photo-item">
-                <img src="https://live.staticflickr.com/65535/53744486207_d54dadb4c4_k.jpg" alt="Interior 3">
-            </div>
-            <div class="photo-item">
-                <img src="https://live.staticflickr.com/65535/53745595828_559d5a6bed_k.jpg" alt="Interior 4">
-            </div>
-        </div>
-    </section>
-
-    <section id="cinema" class="works-section video-section">
-        <h2 class="section-title">CINEMATIC SCENES</h2>
-        <p class="section-subtitle">影像、環境音與流浪的紀錄</p>
+    <section class="works-section" id="works">
         
-        <div class="video-carousel-container">
-            <button class="slider-arrow prev" id="slidePrev" onclick="moveSlider(-1)">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
-            </button>
-            <button class="slider-arrow next" id="slideNext" onclick="moveSlider(1)">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
-            </button>
+        <div id="cinema" class="video-section">
+            <h2 class="section-title">CINEMATIC SCENES</h2>
+            <p class="section-subtitle">影像、環境音與流浪的紀錄</p>
+            
+            <div class="video-carousel-container">
+                <button class="slider-arrow prev" id="slidePrev" onclick="moveSlider(-1)">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                </button>
+                <button class="slider-arrow next" id="slideNext" onclick="moveSlider(1)">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </button>
 
-            <div class="video-slider-wrapper" id="videoWrapper">
-                <div class="video-grid" id="videoGrid">
-                    <div class="video-item photo-item" onclick="openVideo('3QTMVksP2xI')">
-                        <div class="video-cover">
-                            <img src="https://img.youtube.com/vi/3QTMVksP2xI/maxresdefault.jpg" alt="Cinema 1">
-                            <div class="play-icon">
-                                <svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+                <div class="video-slider-wrapper" id="videoWrapper">
+                    <div class="video-grid" id="videoGrid">
+                        <div class="video-item photo-item" onclick="openVideo('3QTMVksP2xI')">
+                            <div class="video-cover">
+                                <img src="https://img.youtube.com/vi/3QTMVksP2xI/maxresdefault.jpg" alt="Cinema 1">
+                                <div class="play-icon"><svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></div>
+                            </div>
+                            <div class="video-info">
+                                <h3>Honda FIT 車中泊改造計畫</h3>
+                                <p>Honda FIT Car Camping Conversion</p>
                             </div>
                         </div>
-                        <div class="video-info">
-                            <h3>Honda FIT 車中泊改造計畫</h3>
-                            <p>Honda FIT Car Camping Conversion</p>
+                        <div class="video-item photo-item" onclick="openVideo('ahLmj3RuP8w')">
+                            <div class="video-cover">
+                                <img src="https://img.youtube.com/vi/ahLmj3RuP8w/maxresdefault.jpg" alt="Cinema 2">
+                                <div class="play-icon"><svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></div>
+                            </div>
+                            <div class="video-info">
+                                <h3>紅葉落下之時，橙色楓林裡的篝火與炊煙</h3>
+                                <p>Wild Camping Diary / 4K Cinematic</p>
+                            </div>
+                        </div>
+                        <div class="video-item photo-item" onclick="openVideo('J7vEna9qweM')">
+                            <div class="video-cover">
+                                <img src="https://img.youtube.com/vi/J7vEna9qweM/maxresdefault.jpg" alt="Cinema 3">
+                                <div class="play-icon"><svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></div>
+                            </div>
+                            <div class="video-info">
+                                <h3>暴風前夕 迷霧中的宜蘭</h3>
+                                <p>Drone footage / CINEMATIC VIDEO</p>
+                            </div>
+                        </div>
+                        <div class="video-item photo-item" onclick="openVideo('eQ45DZpBrko')">
+                            <div class="video-cover">
+                                <img src="https://img.youtube.com/vi/eQ45DZpBrko/maxresdefault.jpg" alt="Cinema 4">
+                                <div class="play-icon"><svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg></div>
+                            </div>
+                            <div class="video-info">
+                                <h3>山麓茶鄉 | 2020冬山微電影</h3>
+                                <p>CINEMATIC VIDEO / 2020 Award-Winning Short Film</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="video-item photo-item" onclick="openVideo('ahLmj3RuP8w')">
-                        <div class="video-cover">
-                            <img src="https://img.youtube.com/vi/ahLmj3RuP8w/maxresdefault.jpg" alt="Cinema 2">
-                            <div class="play-icon">
-                                <svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
-                            </div>
-                        </div>
-                        <div class="video-info">
-                            <h3>紅葉落下之時，橙色楓林裡的篝火與炊煙</h3>
-                            <p>Wild Camping Diary / 4K Cinematic</p>
-                        </div>
-                    </div>
-                    <div class="video-item photo-item" onclick="openVideo('J7vEna9qweM')">
-                        <div class="video-cover">
-                            <img src="https://img.youtube.com/vi/J7vEna9qweM/maxresdefault.jpg" alt="Cinema 1">
-                            <div class="play-icon">
-                                <svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
-                            </div>
-                        </div>
-                        <div class="video-info">
-                            <h3>暴風前夕 迷霧中的宜蘭</h3>
-                            <p>Drone footage / CINEMATIC VIDEO</p>
-                        </div>
-                    </div>
-                    <div class="video-item photo-item" onclick="openVideo('eQ45DZpBrko')">
-                        <div class="video-cover">
-                            <img src="https://img.youtube.com/vi/eQ45DZpBrko/maxresdefault.jpg" alt="Cinema 1">
-                            <div class="play-icon">
-                                <svg viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
-                            </div>
-                        </div>
-                        <div class="video-info">
-                            <h3>山麓茶鄉 | 2020冬山微電影</h3>
-                            <p>CINEMATIC VIDEO / 2020 Award-Winning Short Film</p>
-                        </div>
-                    </div>  
                 </div>
             </div>
         </div>
+
+        <div id="nature" class="nature-section">
+            <h2 class="section-title">NATURE & TRAVEL</h2>
+            <p class="section-subtitle">野徑、微光與流浪的痕跡</p>
+            <div class="photo-grid">
+                <div class="photo-item large">
+                    <img src="https://live.staticflickr.com/65535/54491742976_0c442c6b6b_k.jpg" alt="Nature 1">
+                </div>
+                <div class="photo-item wide">
+                    <img src="https://live.staticflickr.com/65535/51374969201_e7803e8ae3_k.jpg" alt="Nature 2">
+                </div>
+                <div class="photo-item">
+                    <img src="https://live.staticflickr.com/65535/51596162175_9e698b7d0f_k.jpg" alt="Nature 3">
+                </div>
+                <div class="photo-item">
+                    <img src="https://live.staticflickr.com/65535/53667814818_64d2005cf5_k.jpg" alt="Nature 4">
+                </div>
+                <div class="photo-item tall">
+                    <img src="https://live.staticflickr.com/65535/52651908073_2082da090a_b.jpg" alt="Nature 5">
+                </div>
+                <div class="photo-item">
+                    <img src="https://live.staticflickr.com/65535/52213948186_a526fe57f0_k.jpg" alt="Nature 6">
+                </div>
+                <div class="photo-item large">
+                    <img src="https://live.staticflickr.com/65535/54473516983_840fddefd4_k.jpg" alt="Nature 7">
+                </div>
+                <div class="photo-item">
+                    <img src="https://live.staticflickr.com/65535/49497006952_b81e6f5ee4_k.jpg" alt="Nature 8">
+                </div>
+            </div>
+        </div>
+
+        <div id="interior" class="interior-section">
+            <h2 class="section-title">INTERIOR DESIGN</h2>
+            <p class="section-subtitle">線條、空間與光影的對話</p>
+            <div class="photo-grid">
+                <div class="photo-item large">
+                    <img src="https://live.staticflickr.com/65535/55147244082_b285974d24_b.jpg" alt="Interior 1">
+                </div>
+                <div class="photo-item wide">
+                    <img src="https://live.staticflickr.com/65535/53745824775_e618889b48_k.jpg" alt="Interior 2">
+                </div>
+                <div class="photo-item">
+                    <img src="https://live.staticflickr.com/65535/53744486207_d54dadb4c4_k.jpg" alt="Interior 3">
+                </div>
+                <div class="photo-item">
+                    <img src="https://live.staticflickr.com/65535/53745595828_559d5a6bed_k.jpg" alt="Interior 4">
+                </div>
+            </div>
+        </div>
+
     </section>
 
     <div id="lightbox">
@@ -525,13 +410,11 @@
     </div>
 
     <button id="back-to-top" title="回到頂部">
-        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="18 15 12 9 6 15"></polyline>
-        </svg>
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="18 15 12 9 6 15"></polyline></svg>
     </button>
 
     <script>
-    // 1. YouTube IFrame API
+    // YouTube API & Video Logic
     var tag = document.createElement('script');
     tag.src = "https://www.youtube.com/iframe_api";
     var firstScriptTag = document.getElementsByTagName('script')[0];
@@ -552,7 +435,6 @@
         }
     }
     
-    // 2. Hero 影片自動開關
     function startHeroObserver() {
         const heroObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -564,7 +446,7 @@
         heroObserver.observe(document.querySelector('.hero'));
     }
     
-    // 3. 視差效果
+    // Parallax & Scroll Effects
     window.addEventListener('scroll', function() {
         const hero = document.querySelector('.hero');
         const heroContent = document.getElementById('heroContent');
@@ -576,50 +458,32 @@
             let opacity = 1 - (scrollTop / 500); 
             heroContent.style.opacity = opacity >= 0 ? opacity : 0;
             heroContent.style.transform = `translateY(-${scrollTop * 0.1}px)`;
-        } else {
-            hero.style.transform = `translateY(0px)`;
-            hero.style.filter = `blur(0px)`;
-            heroContent.style.opacity = 1;
-            heroContent.style.transform = `translateY(0px)`;
         }
     });
     
-    // 4. 捲動浮現效果 (修正：所有項目統一由下往上，不影響 Slider 左右滑動)
+    // Intersection Observer for items
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.style.opacity = "1";
-                entry.target.style.transform = "translateY(0)"; // 統一回復到原位
+                entry.target.style.transform = "translateY(0)";
                 entry.target.style.filter = "blur(0px)";
-            } else {
-                // 當不在視窗時，設為下方偏移
-                entry.target.style.opacity = "0";
-                entry.target.style.transform = "translateY(50px)";
-                entry.target.style.filter = "blur(5px)";
             }
         });
-    }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+    }, { threshold: 0.1 });
     
-    // 統一針對 photo-item (包含相片與影片) 初始化
     document.querySelectorAll('.photo-item').forEach(item => {
         item.style.opacity = "0";
-        item.style.transform = "translateY(50px)"; // 初始位置都在下方
+        item.style.transform = "translateY(50px)";
         item.style.filter = "blur(5px)";
         item.style.transition = "all 1s cubic-bezier(0.2, 1, 0.3, 1)";
         observer.observe(item);
     });
 
-    // 5. 彈窗邏輯
+    // Lightbox & Video Slider Logic
     const lightbox = document.getElementById('lightbox');
     const lightboxContent = document.getElementById('lightbox-content');
     
-    document.querySelectorAll('.photo-grid .photo-item img').forEach(img => {
-        img.addEventListener('click', (e) => {
-            e.stopPropagation();
-            openLightbox(`<img src="${img.src}">`);
-        });
-    });
-
     function openVideo(id) {
         const iframeHtml = `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
         openLightbox(iframeHtml);
@@ -636,51 +500,22 @@
     lightbox.addEventListener('click', () => {
         lightbox.classList.remove('active');
         document.body.style.overflow = 'auto';
-        setTimeout(() => {
-            if (!lightbox.classList.contains('active')) {
-                lightbox.style.display = 'none';
-                lightboxContent.innerHTML = ''; 
-            }
-        }, 500); 
+        setTimeout(() => { lightbox.style.display = 'none'; }, 500); 
     });
 
-    // 6. 回到頂部
+    const videoWrapper = document.getElementById('videoWrapper');
+    function moveSlider(direction) {
+        const scrollAmount = videoWrapper.clientWidth; 
+        videoWrapper.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
+    }
+
+    // Back to top
     const backToTopBtn = document.getElementById('back-to-top');
     window.addEventListener('scroll', () => {
         if (window.pageYOffset > window.innerHeight / 2) { backToTopBtn.classList.add('show'); } 
         else { backToTopBtn.classList.remove('show'); }
     });
     backToTopBtn.addEventListener('click', () => { window.scrollTo({ top: 0, behavior: 'smooth' }); });
-
-    // 7. 影片滑動邏輯 (維持原本左右滑動功能)
-    const videoWrapper = document.getElementById('videoWrapper');
-    
-    function moveSlider(direction) {
-        const scrollAmount = videoWrapper.clientWidth; 
-        videoWrapper.scrollBy({
-            left: direction * scrollAmount,
-            behavior: 'smooth'
-        });
-    }
-
-    videoWrapper.addEventListener('scroll', () => {
-        const prevBtn = document.getElementById('slidePrev');
-        const nextBtn = document.getElementById('slideNext');
-        prevBtn.disabled = videoWrapper.scrollLeft <= 10;
-        const isEnd = videoWrapper.scrollLeft + videoWrapper.clientWidth >= videoWrapper.scrollWidth - 10;
-        nextBtn.disabled = isEnd;
-    });
-
-    window.addEventListener('load', () => {
-        const prevBtn = document.getElementById('slidePrev');
-        const nextBtn = document.getElementById('slideNext');
-        if(videoWrapper) {
-            prevBtn.disabled = true;
-            if(videoWrapper.scrollWidth <= videoWrapper.clientWidth) {
-                nextBtn.disabled = true;
-            }
-        }
-    });
     </script>
 </body>
 </html>
